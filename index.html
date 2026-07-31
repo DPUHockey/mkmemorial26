@@ -254,7 +254,7 @@ table tr:hover td{background:#222;}
   <div class="header-right">
     <div class="sync-dot" id="sync-dot" title="Firebase sync status"></div>
     <button class="admin-btn" id="admin-btn" onclick="toggleAdmin()">👁 VIEW</button>
-    <div class="ver-badge">v3.2</div>
+    <div class="ver-badge">v3.3</div>
   </div>
 </header>
 
@@ -1214,16 +1214,56 @@ function openSecondScreen(){
       .thdr{padding:6px 14px;font-size:clamp(16px,1.7vw,26px);font-weight:700;letter-spacing:2px;text-align:center;flex-shrink:0;}
       .t-white .thdr{background:#e8e8e8;color:#111;}
       .t-yellow .thdr{background:#F5C800;color:#111;}
-      .t-black .thdr{background:#2a2a2a;color:#fff;border:1px solid #555;}
-      .tbody{background:#111;flex:1;overflow:hidden;padding:3px 12px;display:flex;flex-direction:column;justify-content:space-evenly;}
+      .t-black .thdr{background:#2a2a2a;color:#fff;border-top:1px solid #555;border-left:1px solid #555;border-right:1px solid #555;}
+
+      /* Team body backgrounds — bold diagonal stripe pattern */
+      .tbody{flex:1;overflow:hidden;padding:3px 12px;display:flex;flex-direction:column;justify-content:space-evenly;position:relative;}
+      .t-white .tbody{
+        background-color:#1a1a1a;
+        background-image:repeating-linear-gradient(
+          135deg,
+          rgba(220,220,220,0.06) 0px, rgba(220,220,220,0.06) 18px,
+          transparent 18px, transparent 36px
+        );
+        border-left:3px solid #bbb;
+        border-right:3px solid #bbb;
+        border-bottom:3px solid #bbb;
+      }
+      .t-yellow .tbody{
+        background-color:#1a1500;
+        background-image:repeating-linear-gradient(
+          135deg,
+          rgba(245,200,0,0.10) 0px, rgba(245,200,0,0.10) 18px,
+          transparent 18px, transparent 36px
+        );
+        border-left:3px solid #F5C800;
+        border-right:3px solid #F5C800;
+        border-bottom:3px solid #F5C800;
+      }
+      .t-black .tbody{
+        background-color:#111;
+        background-image:repeating-linear-gradient(
+          135deg,
+          rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 18px,
+          transparent 18px, transparent 36px
+        );
+        border-left:3px solid #444;
+        border-right:3px solid #444;
+        border-bottom:3px solid #444;
+      }
 
       /* Player rows */
-      .pr{display:flex;align-items:center;padding:1px 0;border-bottom:1px solid #1a1a1a;white-space:nowrap;}
+      .pr{display:flex;align-items:center;padding:1px 0;border-bottom:1px solid rgba(255,255,255,0.06);white-space:nowrap;}
       .pr:last-child{border-bottom:none;}
       .pnum{font-weight:700;color:#F5C800;width:36px;text-align:right;flex-shrink:0;margin-right:8px;}
+      .t-white .pnum{color:#c9a200;}
       .pname{font-weight:600;color:#fff;flex:1;overflow:hidden;text-overflow:ellipsis;}
-      .ppos{color:#aaa;flex-shrink:0;margin-left:8px;}
-      .phdr{display:flex;align-items:center;padding:2px 0;border-bottom:2px solid #2a2a2a;white-space:nowrap;color:#555;letter-spacing:1px;}
+      .t-white .pname{color:#f0f0f0;text-shadow:0 1px 2px rgba(0,0,0,0.8);}
+      .ppos{color:#aaa;flex-shrink:0;margin-left:8px;font-weight:600;}
+      .t-yellow .ppos{color:#c9a200;}
+      .t-white .ppos{color:#888;}
+      .phdr{display:flex;align-items:center;padding:2px 0;border-bottom:2px solid rgba(255,255,255,0.12);white-space:nowrap;color:rgba(255,255,255,0.3);letter-spacing:1px;}
+      .t-white .phdr{color:rgba(0,0,0,0.3);}
       .phdr-num{width:36px;text-align:right;flex-shrink:0;margin-right:8px;font-size:.7em;}
       .phdr-name{flex-shrink:0;font-size:.7em;}
       .phdr-pos{flex-shrink:0;margin-left:8px;font-size:.7em;}
