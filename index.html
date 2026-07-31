@@ -254,7 +254,7 @@ table tr:hover td{background:#222;}
   <div class="header-right">
     <div class="sync-dot" id="sync-dot" title="Firebase sync status"></div>
     <button class="admin-btn" id="admin-btn" onclick="toggleAdmin()">👁 VIEW</button>
-    <div class="ver-badge">v2.8</div>
+    <div class="ver-badge">v2.9</div>
   </div>
 </header>
 
@@ -1175,18 +1175,18 @@ function openSecondScreen(){
       .hd-title{font-size:clamp(18px,2.2vw,32px);font-weight:700;color:#fff;letter-spacing:3px;}
       .hd-sub{font-size:clamp(9px,0.9vw,13px);color:#9b59d0;letter-spacing:2px;margin-top:2px;}
 
-      /* ── MAIN ROW: 3 rosters + right panel ── */
-      .main{display:grid;grid-template-columns:1fr 1fr 1fr 340px;gap:8px;min-height:0;}
+      /* ── MAIN ROW: 3 rosters auto-width + right panel takes remaining ── */
+      .main{display:grid;grid-template-columns:auto auto auto 1fr;gap:10px;min-height:0;align-items:stretch;}
 
-      /* Team columns */
-      .tcol{display:flex;flex-direction:column;min-height:0;border-radius:6px;overflow:hidden;}
-      .thdr{padding:6px 10px;font-size:clamp(16px,1.6vw,24px);font-weight:700;letter-spacing:2px;text-align:center;flex-shrink:0;}
+      /* Team columns — shrink to content width */
+      .tcol{display:flex;flex-direction:column;min-height:0;border-radius:6px;overflow:hidden;min-width:0;}
+      .thdr{padding:6px 12px;font-size:clamp(16px,1.6vw,24px);font-weight:700;letter-spacing:2px;text-align:center;flex-shrink:0;}
       .t-white .thdr{background:#e8e8e8;color:#111;}
       .t-yellow .thdr{background:#F5C800;color:#111;}
       .t-black .thdr{background:#2a2a2a;color:#fff;border:1px solid #555;}
-      .tbody{background:#111;flex:1;overflow:hidden;padding:2px 8px;display:flex;flex-direction:column;justify-content:space-evenly;}
+      .tbody{background:#111;flex:1;overflow:hidden;padding:3px 10px;display:flex;flex-direction:column;justify-content:space-evenly;}
 
-      /* Player row — num | name | pos, all inline, no stretching */
+      /* Player row */
       .pr{display:flex;align-items:center;padding:1px 0;border-bottom:1px solid #1a1a1a;white-space:nowrap;}
       .pr:last-child{border-bottom:none;}
       .pnum{font-weight:700;color:#F5C800;width:34px;text-align:right;flex-shrink:0;margin-right:8px;}
@@ -1198,24 +1198,24 @@ function openSecondScreen(){
       .phdr-name{flex-shrink:0;font-size:.75em;letter-spacing:1px;}
       .phdr-pos{flex-shrink:0;margin-left:8px;font-size:.75em;letter-spacing:1px;}
 
-      /* ── RIGHT PANEL: standings + scores ── */
-      .rpanel{display:flex;flex-direction:column;gap:6px;min-height:0;}
-      .sec-lbl{font-size:clamp(10px,0.9vw,13px);font-weight:700;color:#9b59d0;letter-spacing:2px;text-transform:uppercase;border-bottom:1px solid #6b3fa0;padding-bottom:3px;margin-bottom:4px;}
-      .rbox{background:#111;border-radius:6px;padding:6px 8px;flex-shrink:0;}
+      /* ── RIGHT PANEL: standings + scores — fills all remaining width ── */
+      .rpanel{display:flex;flex-direction:column;gap:8px;min-height:0;min-width:0;}
+      .sec-lbl{font-size:clamp(11px,1vw,15px);font-weight:700;color:#9b59d0;letter-spacing:2px;text-transform:uppercase;border-bottom:1px solid #6b3fa0;padding-bottom:3px;margin-bottom:6px;}
+      .rbox{background:#111;border-radius:6px;padding:8px 12px;flex-shrink:0;}
 
-      /* Standings table */
+      /* Standings table — much bigger */
       table{width:100%;border-collapse:collapse;}
-      table th{text-align:left;padding:4px 6px;color:#9b59d0;font-size:clamp(9px,0.85vw,12px);letter-spacing:1px;border-bottom:1px solid #6b3fa0;}
-      table td{padding:5px 6px;border-bottom:1px solid #1a1a1a;color:#ccc;font-size:clamp(11px,1.1vw,16px);}
-      .pts-cell{font-weight:700;color:#F5C800;font-size:clamp(13px,1.2vw,18px);}
+      table th{text-align:left;padding:6px 8px;color:#9b59d0;font-size:clamp(11px,1.1vw,16px);letter-spacing:1px;border-bottom:1px solid #6b3fa0;}
+      table td{padding:7px 8px;border-bottom:1px solid #1a1a1a;color:#ccc;font-size:clamp(14px,1.5vw,22px);}
+      .pts-cell{font-weight:700;color:#F5C800;font-size:clamp(16px,1.7vw,26px);}
 
-      /* Score rows */
-      .gr{display:flex;align-items:center;gap:4px;padding:5px 0;border-bottom:1px solid #1a1a1a;font-size:clamp(11px,1.05vw,15px);}
+      /* Score rows — bigger */
+      .gr{display:flex;align-items:center;gap:6px;padding:7px 0;border-bottom:1px solid #1a1a1a;}
       .gr:last-child{border-bottom:none;}
-      .gtime{color:#F5C800;font-weight:600;width:62px;flex-shrink:0;font-size:clamp(10px,0.9vw,13px);}
-      .gteam{flex:1;font-weight:600;color:#fff;font-size:clamp(11px,1vw,14px);}
+      .gtime{color:#F5C800;font-weight:600;width:72px;flex-shrink:0;font-size:clamp(12px,1.1vw,16px);}
+      .gteam{flex:1;font-weight:600;color:#fff;font-size:clamp(13px,1.3vw,19px);}
       .gteam.right{text-align:right;}
-      .gscore{background:#222;padding:3px 8px;border-radius:4px;font-size:clamp(14px,1.4vw,20px);font-weight:700;color:#fff;min-width:56px;text-align:center;flex-shrink:0;}
+      .gscore{background:#222;padding:4px 10px;border-radius:5px;font-size:clamp(18px,2vw,28px);font-weight:700;color:#fff;min-width:64px;text-align:center;flex-shrink:0;}
 
       /* ── BOTTOM ROW: schedule + awards + leaders ── */
       .bot{display:grid;grid-template-columns:1fr 1fr 200px;gap:8px;flex-shrink:0;margin-top:6px;}
