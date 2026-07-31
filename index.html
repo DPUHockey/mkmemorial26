@@ -248,7 +248,7 @@ table tr:hover td{background:#222;}
   <div class="header-right">
     <div class="sync-dot" id="sync-dot" title="Firebase sync status"></div>
     <button class="admin-btn" id="admin-btn" onclick="toggleAdmin()">👁 VIEW</button>
-    <div class="ver-badge">v4.6</div>
+    <div class="ver-badge">v4.7</div>
   </div>
 </header>
 
@@ -565,10 +565,7 @@ db.ref(ROOT).on('value', snap => {
     black:  data.teams?.black  ? Object.values(data.teams.black).map(p=>({...p,num:p.num||''}))  : [],
   };
   state.schedule = data.schedule ? Object.values(data.schedule) : defaultSchedule();
-  const _TR={'White':'Black','Yellow':'White','Black':'Purple','Purple':'Purple','black':'Purple','white':'Black'};
-  state.games = data.games
-    ? Object.values(data.games).map(g=>({...g,home:_TR[g.home]||g.home,away:_TR[g.away]||g.away}))
-    : defaultGames();
+  state.games = data.games ? Object.values(data.games) : defaultGames();
   state.awards   = data.awards   ? Object.values(data.awards)   : defaultAwards();
   // Scoresheets: array of 3 objects each with goals[] and penalties[]
   if (data.scoresheets) {
