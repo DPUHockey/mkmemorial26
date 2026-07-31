@@ -678,13 +678,11 @@ function handleCSV(e) {
       let num='', pos='SK';
       if (cols.length>=3) {
         const c1=cols[1]||'', c2=cols[2]||'';
-        /* num removed */;
         if (c2 && VALID.includes(c2.toUpperCase())) pos=c2.toUpperCase();
-        else if (c1 && VALID.includes(c1.toUpperCase())) { pos=c1.toUpperCase(); num=''; }
+        else if (c1 && VALID.includes(c1.toUpperCase())) pos=c1.toUpperCase();
       } else if (cols.length===2) {
         const c1=cols[1]||'';
-        /* num removed */;
-        else if (VALID.includes(c1.toUpperCase())) pos=c1.toUpperCase();
+        if (VALID.includes(c1.toUpperCase())) pos=c1.toUpperCase();
       }
       if (state.holding.length>=50) { skipped++; return; }
       const id='p'+Date.now()+Math.random().toString(36).slice(2,5)+idx;
