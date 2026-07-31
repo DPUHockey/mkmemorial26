@@ -248,7 +248,7 @@ table tr:hover td{background:#222;}
   <div class="header-right">
     <div class="sync-dot" id="sync-dot" title="Firebase sync status"></div>
     <button class="admin-btn" id="admin-btn" onclick="toggleAdmin()">👁 VIEW</button>
-    <div class="ver-badge">v5.2</div>
+    <div class="ver-badge">v5.3</div>
   </div>
 </header>
 
@@ -790,10 +790,7 @@ function teamCard(p,i,team) {
   return `<div class="team-player" draggable="true" data-id="${p.id}" data-source="${team}"
     ondragstart="onDragStart(event,'${p.id}','${team}')" ondragend="onDragEnd(event)">
     <span class="drag-handle" style="color:#555;font-size:13px;flex-shrink:0;cursor:grab">⠿</span>
-    <input data-field="name" data-id="${p.id}" data-team="${team}"
-      value="${escAttr(p.name)}"
-      style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:2px 5px;border-radius:4px;font-size:12px;font-family:'Oswald',sans-serif;flex:1;min-width:0"
-      oninput="liveEditTeam('${p.id}','${team}','name',this.value)">
+    <span class="player-name" style="flex:1;font-size:12px">${esc(p.name)}</span>
     <select data-field="pos" data-id="${p.id}" data-team="${team}"
       style="background:#1a1a1a;border:1px solid #333;color:#aaa;padding:2px 3px;border-radius:4px;font-size:11px;font-family:'Oswald',sans-serif;flex-shrink:0"
       onchange="liveEditTeam('${p.id}','${team}','pos',this.value)">
@@ -1418,105 +1415,97 @@ function openSecondScreen(){
       });
     });
   }
-  // Lightning — full screen, once every 15-20s
+  // Lightning — inside BLACK roster box only, white bolts w/ purple streaks, ~every 5s
   (function(){
-    const cv=document.getElementById('bgCanvas');
-    const ctx=cv.getContext('2d');
-    function resize(){cv.width=window.innerWidth;cv.height=window.innerHeight;}
-    resize(); window.addEventListener('resize',resize);
-    let bolts=[];
-    let nextBolt=Date.now()+rnd(2000,4000); // first one soon so you see it on load
     function rnd(a,b){return Math.random()*(b-a)+a;}
-    function makeBolt(){
-      const x=rnd(cv.width*.1,cv.width*.9),segs=[];
-      let cx=x,cy=0;
-      while(cy<cv.height*.85){cy+=rnd(25,65);cx+=rnd(-60,60);segs.push({x:cx,y:cy});}
-      const branches=[];
-      if(Math.random()<.6 && segs.length>2){
-        const bi=Math.floor(segs.length/2);
-        let bx=segs[bi].x,by=segs[bi].y,bs=[{x:bx,y:by}];
-        for(let k=0;k<rnd(2,5);k++){bx+=rnd(-45,45);by+=rnd(20,50);bs.push({x:bx,y:by});}
-        branches.push(bs);
-      }
-      const color=Math.random()<.5?'#c070ff':'#F5C800';
-      // A bolt flashes bright then fades — short life, high initial alpha
-      bolts.push({segs,branches,life:45,maxLife:45,color});
-    }
-    function drawBolt(b){
-      const a=b.life/b.maxLife;
-      ctx.save(); ctx.strokeStyle=b.color; ctx.shadowColor=b.color;
-      // wide glow pass
-      ctx.globalAlpha=a*.25; ctx.lineWidth=18; ctx.shadowBlur=50;
-      ctx.beginPath(); ctx.moveTo(b.segs[0].x,0); b.segs.forEach(s=>ctx.lineTo(s.x,s.y)); ctx.stroke();
-      // mid glow
-      ctx.globalAlpha=a*.5; ctx.lineWidth=5; ctx.shadowBlur=20;
-      ctx.beginPath(); ctx.moveTo(b.segs[0].x,0); b.segs.forEach(s=>ctx.lineTo(s.x,s.y)); ctx.stroke();
-      // bright core
-      ctx.globalAlpha=a*.95; ctx.lineWidth=1.5; ctx.shadowBlur=6;
-      ctx.strokeStyle='#fff';
-      ctx.beginPath(); ctx.moveTo(b.segs[0].x,0); b.segs.forEach(s=>ctx.lineTo(s.x,s.y)); ctx.stroke();
-      // branches
-      ctx.strokeStyle=b.color; ctx.shadowColor=b.color;
-      b.branches.forEach(br=>{
-        ctx.beginPath();ctx.moveTo(br[0].x,br[0].y);br.slice(1).forEach(s=>ctx.lineTo(s.x,s.y));
-        ctx.globalAlpha=a*.4;ctx.lineWidth=.8;ctx.shadowBlur=8;ctx.stroke();
-      });
-      ctx.restore();
-    }
-    function frame(){
-      ctx.clearRect(0,0,cv.width,cv.height);
-      if(Date.now()>nextBolt){makeBolt(); nextBolt=Date.now()+rnd(15000,20000);}
-      bolts=bolts.filter(b=>b.life>0);
-      bolts.forEach(b=>{drawBolt(b); b.life--;});
-      requestAnimationFrame(frame);
-    }
-    frame();
-  })();
 
-  // Smoke — inside each roster .tbody only, using per-canvas elements
-  (function(){
-    function rnd(a,b){return Math.random()*(b-a)+a;}
-    function initSmoke(canvas){
-      const ctx=canvas.getContext('2d');
-      const W=canvas.width,H=canvas.height;
-      const particles=[];
-      for(let i=0;i<18;i++) particles.push({
-        x:rnd(0,W), y:rnd(H*.3,H),
-        r:rnd(30,70), vx:(Math.random()-.5)*.3, vy:-(Math.random()*.5+.15),
-        a:rnd(.06,.14), da:(Math.random()-.5)*.0006
-      });
+    function initLightning(tb){
+      const cv=document.createElement('canvas');
+      cv.className='bolt-cv';
+      cv.style.cssText='position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;';
+      tb.style.position='relative';
+      tb.insertBefore(cv,tb.firstChild);
+
+      let bolts=[], nextBolt=Date.now()+rnd(1000,2000);
+
+      function resize(){cv.width=tb.offsetWidth||200; cv.height=tb.offsetHeight||300;}
+      resize();
+      new ResizeObserver(resize).observe(tb);
+
+      function makeBolt(){
+        const W=cv.width, H=cv.height;
+        const x=rnd(W*.15,W*.85), segs=[];
+        let cx=x, cy=0;
+        while(cy<H){cy+=rnd(18,45);cx+=rnd(-35,35);segs.push({x:Math.max(0,Math.min(W,cx)),y:cy});}
+        const branches=[];
+        if(segs.length>2 && Math.random()<.65){
+          const bi=Math.floor(rnd(1,segs.length-1));
+          let bx=segs[bi].x, by=segs[bi].y, bs=[{x:bx,y:by}];
+          for(let k=0;k<rnd(2,4);k++){bx+=rnd(-30,30);by+=rnd(15,40);bs.push({x:bx,y:by});}
+          branches.push(bs);
+        }
+        // isPurple controls whether this is a purple streak or white core bolt
+        const isPurple = Math.random()<.4;
+        bolts.push({segs,branches,life:50,maxLife:50,isPurple});
+      }
+
+      function drawBolt(ctx,b){
+        const a=b.life/b.maxLife;
+        ctx.save();
+        if(b.isPurple){
+          // Purple streak
+          ctx.strokeStyle='#9b59d0'; ctx.shadowColor='#6b3fa0';
+          ctx.globalAlpha=a*.5; ctx.lineWidth=3; ctx.shadowBlur=12;
+          ctx.beginPath(); ctx.moveTo(b.segs[0].x,0); b.segs.forEach(s=>ctx.lineTo(s.x,s.y)); ctx.stroke();
+          ctx.globalAlpha=a*.25; ctx.lineWidth=8; ctx.shadowBlur=20;
+          ctx.beginPath(); ctx.moveTo(b.segs[0].x,0); b.segs.forEach(s=>ctx.lineTo(s.x,s.y)); ctx.stroke();
+        } else {
+          // White bolt — wide glow
+          ctx.strokeStyle='#aaaaff'; ctx.shadowColor='#6b3fa0';
+          ctx.globalAlpha=a*.2; ctx.lineWidth=14; ctx.shadowBlur=30;
+          ctx.beginPath(); ctx.moveTo(b.segs[0].x,0); b.segs.forEach(s=>ctx.lineTo(s.x,s.y)); ctx.stroke();
+          // mid
+          ctx.globalAlpha=a*.5; ctx.lineWidth=4; ctx.shadowBlur=12;
+          ctx.beginPath(); ctx.moveTo(b.segs[0].x,0); b.segs.forEach(s=>ctx.lineTo(s.x,s.y)); ctx.stroke();
+          // bright white core
+          ctx.strokeStyle='#ffffff'; ctx.shadowColor='#ffffff';
+          ctx.globalAlpha=a; ctx.lineWidth=1.5; ctx.shadowBlur=6;
+          ctx.beginPath(); ctx.moveTo(b.segs[0].x,0); b.segs.forEach(s=>ctx.lineTo(s.x,s.y)); ctx.stroke();
+          // branches in purple
+          ctx.strokeStyle='#c080ff'; ctx.shadowColor='#6b3fa0';
+          b.branches.forEach(br=>{
+            ctx.beginPath();ctx.moveTo(br[0].x,br[0].y);br.slice(1).forEach(s=>ctx.lineTo(s.x,s.y));
+            ctx.globalAlpha=a*.5;ctx.lineWidth=1;ctx.shadowBlur=8;ctx.stroke();
+          });
+        }
+        ctx.restore();
+      }
+
       function frame(){
-        ctx.clearRect(0,0,W,H);
-        particles.forEach(p=>{
-          p.x+=p.vx; p.y+=p.vy; p.a+=p.da;
-          if(p.a<.04)p.a=.04; if(p.a>.16)p.a=.16;
-          if(p.y+p.r<0){p.y=H+p.r; p.x=rnd(0,W); p.vy=-(Math.random()*.5+.15);}
-          const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r);
-          g.addColorStop(0,'rgba(110,60,160,'+p.a+')');
-          g.addColorStop(.5,'rgba(55,25,85,'+(p.a*.6)+')');
-          g.addColorStop(1,'rgba(0,0,0,0)');
-          ctx.fillStyle=g; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
-        });
+        const ctx=cv.getContext('2d');
+        ctx.clearRect(0,0,cv.width,cv.height);
+        if(Date.now()>nextBolt){
+          makeBolt();
+          // 30% chance of a quick double-strike
+          if(Math.random()<.3) setTimeout(makeBolt,80);
+          nextBolt=Date.now()+rnd(4000,6000);
+        }
+        bolts=bolts.filter(b=>b.life>0);
+        bolts.forEach(b=>{drawBolt(ctx,b);b.life--;});
         requestAnimationFrame(frame);
       }
       frame();
     }
-    // Wait for render then attach a canvas to each .tbody
-    function attachSmoke(){
-      document.querySelectorAll('.tbody').forEach(tb=>{
-        if(tb.querySelector('.smoke-cv')) return; // already done
-        const cv=document.createElement('canvas');
-        cv.className='smoke-cv';
-        cv.width=tb.offsetWidth||200; cv.height=tb.offsetHeight||300;
-        cv.style.cssText='position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:1;';
-        tb.style.position='relative';
-        tb.insertBefore(cv,tb.firstChild);
-        initSmoke(cv);
+
+    function attach(){
+      // Only the BLACK box = .t-black .tbody
+      document.querySelectorAll('.t-black .tbody').forEach(tb=>{
+        if(tb.querySelector('.bolt-cv')) return;
+        initLightning(tb);
       });
     }
-    // tbody gets populated after Firebase loads — watch for it
-    setTimeout(attachSmoke,1500);
-    setTimeout(attachSmoke,3000); // retry in case of slow load
+    setTimeout(attach,1500);
+    setTimeout(attach,3000);
   })();
   <\/script>
   </body></html>`);
