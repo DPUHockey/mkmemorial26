@@ -248,7 +248,7 @@ table tr:hover td{background:#222;}
   <div class="header-right">
     <div class="sync-dot" id="sync-dot" title="Firebase sync status"></div>
     <button class="admin-btn" id="admin-btn" onclick="toggleAdmin()">👁 VIEW</button>
-    <div class="ver-badge">v5.1</div>
+    <div class="ver-badge">v5.2</div>
   </div>
 </header>
 
@@ -790,10 +790,7 @@ function teamCard(p,i,team) {
   return `<div class="team-player" draggable="true" data-id="${p.id}" data-source="${team}"
     ondragstart="onDragStart(event,'${p.id}','${team}')" ondragend="onDragEnd(event)">
     <span class="drag-handle" style="color:#555;font-size:13px;flex-shrink:0;cursor:grab">⠿</span>
-    <input data-field="name" data-id="${p.id}" data-team="${team}"
-      value="${escAttr(p.name)}"
-      style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:2px 5px;border-radius:4px;font-size:12px;font-family:'Oswald',sans-serif;flex:1;min-width:0"
-      oninput="liveEditTeam('${p.id}','${team}','name',this.value)">
+    <span class="player-name" style="flex:1;font-size:12px">${esc(p.name)}</span>
     <select data-field="pos" data-id="${p.id}" data-team="${team}"
       style="background:#1a1a1a;border:1px solid #333;color:#aaa;padding:2px 3px;border-radius:4px;font-size:11px;font-family:'Oswald',sans-serif;flex-shrink:0"
       onchange="liveEditTeam('${p.id}','${team}','pos',this.value)">
@@ -1394,7 +1391,7 @@ function openSecondScreen(){
         if(rows.length){
           const avail = firstTbody.clientHeight;
           const perRow = Math.floor(avail / (rows.length + 1));
-          fs = Math.min(Math.max(Math.floor(perRow * 0.65), 12), 30);
+          fs = Math.min(Math.max(Math.floor(perRow * 0.65), 24), 60);
         }
       }
       document.querySelectorAll('.tbody').forEach(tb => { tb.style.fontSize = fs + 'px'; });
