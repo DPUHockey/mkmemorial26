@@ -248,7 +248,7 @@ table tr:hover td{background:#222;}
   <div class="header-right">
     <div class="sync-dot" id="sync-dot" title="Firebase sync status"></div>
     <button class="admin-btn" id="admin-btn" onclick="toggleAdmin()">👁 VIEW</button>
-    <div class="ver-badge">v4.7</div>
+    <div class="ver-badge">v4.9</div>
   </div>
 </header>
 
@@ -520,10 +520,10 @@ function defaultSchedule() {
     { time: '5:09–5:12',    desc: 'National Anthem' },
     { time: '5:15 PM',      desc: 'Game 1 — Puck Drop (4 min warmup, 15 / 1 / 15)' },
     { time: '5:50 PM',      desc: 'Game 2 — Puck Drop (4 min warmup, 15 min 1st half)' },
-    { time: '6:09 PM',      desc: '🧊 Ice Cut — 10 minutes' },
+    { time: '6:09 PM',      desc: '🧊 Ice Cut — 10 minutes (optional)' },
     { time: '6:19 PM',      desc: 'Game 2 — 2nd Half resumes (15 min)' },
     { time: '6:34 PM',      desc: 'Game 3 — Puck Drop (4 min warmup, 15 / 1 / 15)' },
-    { time: '~7:09 PM',     desc: 'Tournament concludes — Awards & celebration at the bar' },
+    { time: '7:09 PM',      desc: 'Tournament concludes — Awards & celebration at the bar' },
   ];
 }
 function defaultGames() {
@@ -551,6 +551,7 @@ function setSyncDot(color) { dot.className = 'sync-dot ' + color; }
 let _ignoreNext = false; // prevent echo when we write
 
 db.ref(ROOT).on('value', snap => {
+  if (_ignoreNext) { _ignoreNext = false; setSyncDot('green'); return; }
   setSyncDot('green');
   const data = snap.val();
   if (!data) {
@@ -566,7 +567,12 @@ db.ref(ROOT).on('value', snap => {
   };
   state.schedule = data.schedule ? Object.values(data.schedule) : defaultSchedule();
   state.games = data.games ? Object.values(data.games) : defaultGames();
-  state.awards   = data.awards   ? Object.values(data.awards)   : defaultAwards();
+  const REMOVED_AWARDS = ['Best Goalie','Most Goals','Most Assists','Fan Favorite'];
+  const rawAwards = data.awards ? Object.values(data.awards) : defaultAwards();
+  const liveNames = new Set(rawAwards.map(a=>a.name));
+  const merged = rawAwards.filter(a=>!REMOVED_AWARDS.includes(a.name));
+  defaultAwards().forEach(da=>{ if(!liveNames.has(da.name)&&!REMOVED_AWARDS.includes(da.name)) merged.push(da); });
+  state.awards = merged;
   // Scoresheets: array of 3 objects each with goals[] and penalties[]
   if (data.scoresheets) {
     const ss = Object.values(data.scoresheets);
@@ -607,6 +613,7 @@ function pushState() {
       i2: { goals: arrToObj(state.scoresheets[2].goals, true), penalties: arrToObj(state.scoresheets[2].penalties, true) },
     }
   };
+  _ignoreNext = true;
   db.ref(ROOT).set(pkg)
     .then(()=>setSyncDot('green'))
     .catch(()=>setSyncDot('red'));
