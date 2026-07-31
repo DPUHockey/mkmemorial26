@@ -10,7 +10,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap');
-:root{--black:#1a1a1a;--deep:#111;--white:#fff;--yellow:#F5C800;--yellow-dark:#c9a200;--purple:#6b3fa0;--purple-light:#9b59d0;--gray:#888;--bg:#1e1e1e;--panel:#262626;--border:#333;--radius:6px;}
+:root{--black:#1a1a1a;--deep:#111;--white:#fff;--yellow:#6b3fa0;--yellow-dark:#4e2d7a;--purple:#6b3fa0;--purple-light:#9b59d0;--gray:#888;--bg:#1e1e1e;--panel:#262626;--border:#333;--radius:6px;}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Open Sans',sans-serif;background:var(--bg);color:#ccc;min-height:100vh;}
 header{background:linear-gradient(135deg,#0f0f0f 0%,#1a1a1a 60%,#2a1a40 100%);border-bottom:3px solid var(--purple);padding:14px 20px;display:flex;align-items:center;gap:14px;}
@@ -24,7 +24,7 @@ header{background:linear-gradient(135deg,#0f0f0f 0%,#1a1a1a 60%,#2a1a40 100%);bo
 .sync-dot{width:10px;height:10px;border-radius:50%;background:#555;transition:background .3s;}
 .sync-dot.green{background:#4caf50;}
 .sync-dot.red{background:#e55;}
-.sync-dot.yellow{background:#F5C800;}
+.sync-dot.yellow{background:#6b3fa0;}
 /* Admin toggle */
 .admin-btn{font-family:'Oswald',sans-serif;font-size:11px;font-weight:600;background:#1a1a1a;border:1px solid #444;color:#888;padding:5px 12px;border-radius:20px;cursor:pointer;letter-spacing:.5px;}
 .admin-btn.on{background:var(--purple);border-color:var(--purple);color:#fff;}
@@ -52,7 +52,7 @@ select option{background:#1a1a1a;}
 .btn:active{transform:scale(.97);}
 .btn-purple{background:var(--purple);color:#fff;}
 .btn-purple:hover{background:var(--purple-light);}
-.btn-yellow{background:var(--yellow);color:#1a1a1a;}
+.btn-yellow{background:var(--yellow);color:#fff;}
 .btn-yellow:hover{background:var(--yellow-dark);}
 .btn-sm{padding:6px 12px;font-size:11px;}
 /* Holding list */
@@ -81,7 +81,7 @@ select option{background:#1a1a1a;}
 .yellow-team .team-header{background:var(--yellow);}
 .black-team .team-header{background:#333;}
 .team-header h3{font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;flex:1;}
-.white-team .team-header h3,.yellow-team .team-header h3{color:#111;}
+.white-team .team-header h3{color:#111;}.yellow-team .team-header h3{color:#fff;}
 .black-team .team-header h3{color:#fff;}
 .team-count{font-family:'Oswald',sans-serif;font-size:12px;font-weight:600;padding:2px 8px;border-radius:20px;}
 .white-team .team-count{background:#333;color:#fff;}
@@ -198,7 +198,7 @@ table tr:hover td{background:#222;}
 .period-btn.on{background:var(--purple);border-color:var(--purple);color:#fff;}
 .team-pill{font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;letter-spacing:.5px;}
 .pill-white{background:#ddd;color:#111;}
-.pill-yellow{background:#F5C800;color:#111;}
+.pill-yellow{background:#6b3fa0;color:#fff;}
 .pill-black{background:#333;color:#fff;border:1px solid #555;}
 @media(max-width:700px){
   .sh-form{grid-template-columns:60px 1fr 1fr;grid-template-rows:auto auto;}
@@ -248,7 +248,7 @@ table tr:hover td{background:#222;}
   <div class="header-right">
     <div class="sync-dot" id="sync-dot" title="Firebase sync status"></div>
     <button class="admin-btn" id="admin-btn" onclick="toggleAdmin()">👁 VIEW</button>
-    <div class="ver-badge">v4.0</div>
+    <div class="ver-badge">v4.1</div>
   </div>
 </header>
 
@@ -315,7 +315,7 @@ table tr:hover td{background:#222;}
           <div class="drop-zone" id="drop-white" ondragover="onDragOver(event,'white')" ondragleave="onDragLeave(event,'white')" ondrop="onDrop(event,'white')"><div class="empty-hint">Drop players here</div></div>
         </div>
         <div class="team-panel yellow-team panel">
-          <div class="team-header"><h3>🟡 YELLOW</h3><span class="team-count" id="yellow-count">0</span></div>
+          <div class="team-header"><h3>🟣 PURPLE</h3><span class="team-count" id="yellow-count">0</span></div>
           <div class="drop-zone" id="drop-yellow" ondragover="onDragOver(event,'yellow')" ondragleave="onDragLeave(event,'yellow')" ondrop="onDrop(event,'yellow')"><div class="empty-hint">Drop players here</div></div>
         </div>
         <div class="team-panel black-team panel">
@@ -408,7 +408,7 @@ table tr:hover td{background:#222;}
     <div class="assign-sheet-title" id="assign-sheet-name">Assign Player</div>
     <div class="assign-sheet-sub">Choose a team:</div>
     <button class="assign-team-btn" style="background:#e8e8e8;color:#111" onclick="mobileAssign('white')">⬜ WHITE</button>
-    <button class="assign-team-btn" style="background:#F5C800;color:#111" onclick="mobileAssign('yellow')">🟡 YELLOW</button>
+    <button class="assign-team-btn" style="background:#6b3fa0;color:#fff" onclick="mobileAssign('yellow')">🟣 PURPLE</button>
     <button class="assign-team-btn" style="background:#333;color:#fff;border:1px solid #555" onclick="mobileAssign('black')">⬛ BLACK</button>
     <button class="assign-team-btn" style="background:#1a1a3a;color:#9b59d0;border:1px solid #6b3fa0" onclick="mobileAssign('holding')">↩ Back to Bullpen</button>
     <button class="assign-cancel" onclick="closeAssignSheet()">Cancel</button>
@@ -758,7 +758,7 @@ function teamCard(p,i,team) {
   if (!isAdmin) {
     // View mode — static
     const jersey = p.num
-      ? `<span style="font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;color:#F5C800;min-width:32px;text-align:right;flex-shrink:0">#${esc(p.num)}</span>`
+      ? `<span style="font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;color:#9b59d0;min-width:32px;text-align:right;flex-shrink:0">#${esc(p.num)}</span>`
       : `<span style="min-width:32px;flex-shrink:0;color:#444;font-size:11px;text-align:right">–</span>`;
     return `<div class="team-player" data-id="${p.id}" data-source="${team}" onclick="showReadonlyHint()">
       ${jersey}
@@ -1008,7 +1008,7 @@ function computeStandings(){
     else if(a>h){t[an].w++;t[an].pts+=2;t[hn].l++;}
     else{t[hn].tie++;t[hn].pts++;t[an].tie++;t[an].pts++;}
   });
-  const colors={White:'#ddd',Yellow:'#F5C800',Black:'#888'};
+  const colors={White:'#ddd',Yellow:'#6b3fa0',Black:'#888'};
   const rows=Object.entries(t).sort((a,b)=>b[1].pts-a[1].pts||(b[1].gf-b[1].ga)-(a[1].gf-a[1].ga));
   document.getElementById('standings-body').innerHTML=rows.map(([name,s])=>`
     <tr>
@@ -1049,10 +1049,10 @@ function renderOutput(){
 }
 
 function buildOutputHTML(){
-  const tLabels={white:'WHITE',yellow:'YELLOW',black:'BLACK'};
+  const tLabels={white:'WHITE',yellow:'PURPLE',black:'BLACK'};
   const rostersHtml=['white','yellow','black'].map(team=>{
     const players=sortPlayers(state.teams[team]);
-    const hdr=team==='white'?'background:#e8e8e8;color:#111':team==='yellow'?'background:#F5C800;color:#111':'background:#2a2a2a;color:#fff;border:1px solid #444';
+    const hdr=team==='white'?'background:#e8e8e8;color:#111':team==='yellow'?'background:#6b3fa0;color:#fff':'background:#2a2a2a;color:#fff;border:1px solid #444';
     return `<div style="border-radius:6px;overflow:hidden;flex:1">
       <div style="${hdr};padding:12px 16px;font-family:Oswald,sans-serif;font-size:18px;font-weight:700;letter-spacing:2px;text-align:center">${tLabels[team]} <span style="font-size:12px;opacity:.6">(${players.length})</span></div>
       <div style="background:#161616;padding:10px 14px">
@@ -1097,7 +1097,7 @@ function buildOutputHTML(){
     if(h>a){ts[hn].w++;ts[hn].pts+=2;ts[an].l++;}else if(a>h){ts[an].w++;ts[an].pts+=2;ts[hn].l++;}
     else{ts[hn].tie++;ts[hn].pts++;ts[an].tie++;ts[an].pts++;}
   });
-  const tColors={White:'#ddd',Yellow:'#F5C800',Black:'#888'};
+  const tColors={White:'#ddd',Yellow:'#6b3fa0',Black:'#888'};
   const standRows=Object.entries(ts).sort((a,b)=>b[1].pts-a[1].pts).map(([name,s])=>`
     <tr>
       <td style="padding:8px 10px;border-bottom:1px solid #252525"><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${tColors[name]||'#888'};margin-right:8px"></span>${name}</td>
@@ -1105,7 +1105,7 @@ function buildOutputHTML(){
       <td style="padding:8px 10px;border-bottom:1px solid #252525;text-align:center">${s.w}</td>
       <td style="padding:8px 10px;border-bottom:1px solid #252525;text-align:center">${s.l}</td>
       <td style="padding:8px 10px;border-bottom:1px solid #252525;text-align:center">${s.tie}</td>
-      <td style="padding:8px 10px;border-bottom:1px solid #252525;text-align:center;font-weight:700;color:#F5C800;font-size:16px">${s.pts}</td>
+      <td style="padding:8px 10px;border-bottom:1px solid #252525;text-align:center;font-weight:700;color:#6b3fa0;font-size:16px">${s.pts}</td>
       <td style="padding:8px 10px;border-bottom:1px solid #252525;text-align:center">${s.gf}</td>
       <td style="padding:8px 10px;border-bottom:1px solid #252525;text-align:center">${s.ga}</td>
     </tr>`).join('');
@@ -1113,7 +1113,7 @@ function buildOutputHTML(){
   const awardsHtml=state.awards.filter(a=>a.winner).map(a=>`
     <div style="display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-bottom:1px solid #222">
       <span style="font-size:18px">${a.icon}</span>
-      <span style="color:#F5C800;font-weight:700;min-width:160px;font-family:Oswald,sans-serif;font-size:14px">${esc(a.name)}</span>
+      <span style="color:#9b59d0;font-weight:700;min-width:160px;font-family:Oswald,sans-serif;font-size:14px">${esc(a.name)}</span>
       <div><div style="color:#fff;font-family:Oswald,sans-serif;font-size:14px">${esc(a.winner)}</div>${a.note?`<div style="color:#888;font-size:11px">${esc(a.note)}</div>`:''}</div>
     </div>`).join('')||'<div style="color:#444;font-size:12px">Awards will appear once assigned</div>';
 
@@ -1172,13 +1172,13 @@ function openSecondScreen(){
       .tcol{display:flex;flex-direction:column;min-height:0;border-radius:6px;overflow:hidden;}
       .thdr{padding:6px 14px;font-size:clamp(16px,1.7vw,26px);font-weight:700;letter-spacing:2px;text-align:center;flex-shrink:0;}
       .t-white .thdr{background:#e8e8e8;color:#111;}
-      .t-yellow .thdr{background:#F5C800;color:#111;}
+      .t-yellow .thdr{background:#6b3fa0;color:#fff;}
       .t-black .thdr{background:#2a2a2a;color:#fff;border-top:1px solid #555;border-left:1px solid #555;border-right:1px solid #555;}
 
       /* Team body backgrounds — semi-transparent so canvas bleeds through */
       .tbody{flex:1;overflow:hidden;padding:3px 12px;display:flex;flex-direction:column;justify-content:space-evenly;position:relative;}
       .t-white .tbody{background:rgba(20,20,20,0.55);border-left:3px solid #bbb;border-right:3px solid #bbb;border-bottom:3px solid #bbb;}
-      .t-yellow .tbody{background:rgba(18,14,0,0.55);border-left:3px solid #F5C800;border-right:3px solid #F5C800;border-bottom:3px solid #F5C800;}
+      .t-yellow .tbody{background:rgba(30,15,55,0.55);border-left:3px solid #6b3fa0;border-right:3px solid #6b3fa0;border-bottom:3px solid #6b3fa0;}
       .t-black .tbody{background:rgba(8,8,8,0.55);border-left:3px solid #444;border-right:3px solid #444;border-bottom:3px solid #444;}
       /* Canvas sits behind everything */
       #bgCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none;}
@@ -1186,12 +1186,12 @@ function openSecondScreen(){
       /* Player rows */
       .pr{display:flex;align-items:center;padding:1px 0;border-bottom:1px solid rgba(255,255,255,0.06);white-space:nowrap;position:relative;z-index:1;}
       .pr:last-child{border-bottom:none;}
-      .pnum{font-weight:700;color:#F5C800;width:36px;text-align:right;flex-shrink:0;margin-right:8px;}
-      .t-white .pnum{color:#c9a200;}
+      .pnum{font-weight:700;color:#9b59d0;width:36px;text-align:right;flex-shrink:0;margin-right:8px;}
+      .t-white .pnum{color:#bbb;}
       .pname{font-weight:600;color:#fff;flex:1;overflow:hidden;text-overflow:ellipsis;}
       .t-white .pname{color:#f0f0f0;text-shadow:0 1px 2px rgba(0,0,0,0.8);}
       .ppos{color:#aaa;flex-shrink:0;margin-left:8px;font-weight:600;}
-      .t-yellow .ppos{color:#c9a200;}
+      .t-yellow .ppos{color:#9b59d0;}
       .t-white .ppos{color:#888;}
       .phdr{display:flex;align-items:center;padding:2px 0;border-bottom:2px solid rgba(255,255,255,0.12);white-space:nowrap;color:rgba(255,255,255,0.3);letter-spacing:1px;position:relative;z-index:1;}
       .t-white .phdr{color:rgba(0,0,0,0.3);}
@@ -1282,7 +1282,7 @@ function openSecondScreen(){
 
   function render(s){
     // ── Rosters ──
-    const teams=[['white','t-white','WHITE'],['yellow','t-yellow','YELLOW'],['black','t-black','BLACK']];
+    const teams=[['white','t-white','WHITE'],['yellow','t-yellow','PURPLE'],['black','t-black','BLACK']];
     const allPlayers = [...s.teams.white,...s.teams.yellow,...s.teams.black];
     const rosHtml = teams.map(([tm,cls,lbl])=>{
       const pl=sp(s.teams[tm]);
@@ -1318,7 +1318,7 @@ function openSecondScreen(){
       else if(a>h){ts[an].w++;ts[an].pts+=2;ts[hn].l++;}
       else{ts[hn].tie++;ts[hn].pts++;ts[an].tie++;ts[an].pts++;}
     });
-    const tC={White:'#ddd',Yellow:'#F5C800',Black:'#666'};
+    const tC={White:'#ddd',Yellow:'#6b3fa0',Black:'#666'};
     const srows=Object.entries(ts).sort((a,b)=>b[1].pts-a[1].pts).map(([n,x])=>
       '<tr>'
       +'<td style="text-align:left"><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:'+(tC[n]||'#888')+';margin-right:6px;vertical-align:middle"></span>'+n+'</td>'
@@ -1519,7 +1519,7 @@ const PENALTIES = [
   'Unsportsmanlike Conduct','Too Many Men','Delay of Game',
   'Embellishment','Fighting','Misconduct (10 min)','Game Misconduct'
 ];
-const TEAM_COLORS = { White:'#ddd', Yellow:'#F5C800', Black:'#666' };
+const TEAM_COLORS = { White:'#ddd', Yellow:'#6b3fa0', Black:'#666' };
 const MIN_OPTIONS = [2, 4, 5, 10];
 
 function renderScoresheet() {
