@@ -248,7 +248,7 @@ table tr:hover td{background:#222;}
   <div class="header-right">
     <div class="sync-dot" id="sync-dot" title="Firebase sync status"></div>
     <button class="admin-btn" id="admin-btn" onclick="toggleAdmin()">👁 VIEW</button>
-    <div class="ver-badge">v3.5</div>
+    <div class="ver-badge">v3.6</div>
   </div>
 </header>
 
@@ -999,6 +999,8 @@ function computeStandings(){
   });
   // W/L/T/GF/GA — only from completed games with actual scores entered
   state.games.forEach((g,i)=>{
+    const ss=state.scoresheets[i];
+    if(!ss||!ss.completed) return;
     const hn=g.home,an=g.away;
     if(!TEAMS.includes(hn)||!TEAMS.includes(an)) return;
     if(g.scoreHome===''||g.scoreHome===null||g.scoreHome===undefined) return;
@@ -1177,41 +1179,14 @@ function openSecondScreen(){
       .t-yellow .thdr{background:#F5C800;color:#111;}
       .t-black .thdr{background:#2a2a2a;color:#fff;border-top:1px solid #555;border-left:1px solid #555;border-right:1px solid #555;}
 
-      /* Team body backgrounds — bold diagonal stripe pattern */
+      /* Team body backgrounds */
       .tbody{flex:1;overflow:hidden;padding:3px 12px;display:flex;flex-direction:column;justify-content:space-evenly;position:relative;}
-      .t-white .tbody{
-        background-color:#1a1a1a;
-        background-image:repeating-linear-gradient(
-          135deg,
-          rgba(220,220,220,0.06) 0px, rgba(220,220,220,0.06) 18px,
-          transparent 18px, transparent 36px
-        );
-        border-left:3px solid #bbb;
-        border-right:3px solid #bbb;
-        border-bottom:3px solid #bbb;
-      }
-      .t-yellow .tbody{
-        background-color:#1a1500;
-        background-image:repeating-linear-gradient(
-          135deg,
-          rgba(245,200,0,0.10) 0px, rgba(245,200,0,0.10) 18px,
-          transparent 18px, transparent 36px
-        );
-        border-left:3px solid #F5C800;
-        border-right:3px solid #F5C800;
-        border-bottom:3px solid #F5C800;
-      }
-      .t-black .tbody{
-        background-color:#111;
-        background-image:repeating-linear-gradient(
-          135deg,
-          rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 18px,
-          transparent 18px, transparent 36px
-        );
-        border-left:3px solid #444;
-        border-right:3px solid #444;
-        border-bottom:3px solid #444;
-      }
+      .t-white .tbody{background:#181818;border-left:3px solid #bbb;border-right:3px solid #bbb;border-bottom:3px solid #bbb;}
+      .t-yellow .tbody{background:#141000;border-left:3px solid #F5C800;border-right:3px solid #F5C800;border-bottom:3px solid #F5C800;}
+      .t-black .tbody{background:#0f0f0f;border-left:3px solid #444;border-right:3px solid #444;border-bottom:3px solid #444;}
+
+      /* Smoke+lightning canvas sits behind everything */
+      #bgCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none;}
 
       /* Player rows */
       .pr{display:flex;align-items:center;padding:1px 0;border-bottom:1px solid rgba(255,255,255,0.06);white-space:nowrap;}
@@ -1275,6 +1250,7 @@ function openSecondScreen(){
       .footer{text-align:center;font-size:clamp(9px,0.8vw,12px);color:#333;letter-spacing:2px;}
     </style>
   </head><body>
+  <canvas id="bgCanvas"></canvas>
   <div class="hd">
     <div class="hd-title">★ MITCH KURTZ MEMORIAL TOURNAMENT ★</div>
     <div class="hd-sub">2nd Annual Benefit Game &nbsp;·&nbsp; Round Robin &nbsp;·&nbsp; August 1, 2026 &nbsp;·&nbsp; Puck Drop 5:15 PM &nbsp;·&nbsp; Inwood Ice Arena, Joliet IL</div>
@@ -1424,6 +1400,54 @@ function openSecondScreen(){
       });
     });
   }
+  // ── Smoke + Lightning background ──
+  (function(){
+    const cv=document.getElementById('bgCanvas');
+    const ctx=cv.getContext('2d');
+    function resize(){cv.width=window.innerWidth;cv.height=window.innerHeight;}
+    resize(); window.addEventListener('resize',resize);
+    const smokes=[];
+    for(let i=0;i<60;i++) smokes.push({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:Math.random()*120+40,vx:(Math.random()-.5)*.3,vy:-(Math.random()*.4+.1),a:Math.random()*.07+.02,da:(Math.random()-.5)*.0003});
+    let bolts=[],nextBolt=Date.now()+rnd(1200,3500);
+    function rnd(a,b){return Math.random()*(b-a)+a;}
+    function makeBolt(){
+      const x=rnd(cv.width*.1,cv.width*.9),segs=[];
+      let cx=x,cy=0;
+      while(cy<cv.height*.75){cy+=rnd(30,70);cx+=rnd(-60,60);segs.push({x:cx,y:cy});}
+      const branches=[];
+      if(Math.random()<.5){let bx=segs[2]?.x||x,by=segs[2]?.y||100,bs=[{x:bx,y:by}];for(let k=0;k<rnd(2,5);k++){bx+=rnd(-50,50);by+=rnd(25,55);bs.push({x:bx,y:by});}branches.push(bs);}
+      bolts.push({segs,branches,life:rnd(60,140),maxLife:rnd(60,140),color:Math.random()<.5?'#b060ff':'#F5C800'});
+    }
+    function drawBolt(b){
+      const a=(b.life/b.maxLife);
+      ctx.save();
+      ctx.strokeStyle=b.color; ctx.shadowColor=b.color;
+      ctx.globalAlpha=a*.18; ctx.lineWidth=14; ctx.shadowBlur=30;
+      ctx.beginPath(); ctx.moveTo(b.segs[0].x,0); b.segs.forEach(s=>ctx.lineTo(s.x,s.y)); ctx.stroke();
+      ctx.globalAlpha=a*.95; ctx.lineWidth=1.5; ctx.shadowBlur=8;
+      ctx.beginPath(); ctx.moveTo(b.segs[0].x,0); b.segs.forEach(s=>ctx.lineTo(s.x,s.y)); ctx.stroke();
+      b.branches.forEach(br=>{ctx.beginPath();ctx.moveTo(br[0].x,br[0].y);br.slice(1).forEach(s=>ctx.lineTo(s.x,s.y));ctx.globalAlpha=a*.4;ctx.lineWidth=.8;ctx.stroke();});
+      ctx.restore();
+    }
+    function frame(){
+      ctx.clearRect(0,0,cv.width,cv.height);
+      smokes.forEach(s=>{
+        s.x+=s.vx;s.y+=s.vy;s.a+=s.da;
+        if(s.a<.01)s.a=.01; if(s.a>.09)s.a=.09;
+        if(s.y+s.r<0){s.y=cv.height+s.r;s.x=Math.random()*cv.width;}
+        const g=ctx.createRadialGradient(s.x,s.y,0,s.x,s.y,s.r);
+        g.addColorStop(0,'rgba(80,50,120,'+s.a+')');
+        g.addColorStop(.5,'rgba(30,20,50,'+(s.a*.5)+')');
+        g.addColorStop(1,'rgba(0,0,0,0)');
+        ctx.fillStyle=g; ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2); ctx.fill();
+      });
+      if(Date.now()>nextBolt){makeBolt();nextBolt=Date.now()+rnd(800,3200);}
+      bolts=bolts.filter(b=>b.life>0);
+      bolts.forEach(b=>{drawBolt(b);b.life--;});
+      requestAnimationFrame(frame);
+    }
+    frame();
+  })();
   <\/script>
   </body></html>`);
   w.document.close();
