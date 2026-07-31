@@ -248,7 +248,7 @@ table tr:hover td{background:#222;}
   <div class="header-right">
     <div class="sync-dot" id="sync-dot" title="Firebase sync status"></div>
     <button class="admin-btn" id="admin-btn" onclick="toggleAdmin()">👁 VIEW</button>
-    <div class="ver-badge">v4.2</div>
+    <div class="ver-badge">v4.3</div>
   </div>
 </header>
 
@@ -527,9 +527,9 @@ function defaultSchedule() {
 }
 function defaultGames() {
   return [
-    { time: '5:15 PM', home: 'White', away: 'Black',  scoreHome: '', scoreAway: '' },
-    { time: '5:50 PM', home: 'Yellow', away: 'Black', scoreHome: '', scoreAway: '' },
-    { time: '6:34 PM', home: 'White', away: 'Yellow', scoreHome: '', scoreAway: '' },
+    { time: '5:15 PM', home: 'Black', away: 'Purple',  scoreHome: '', scoreAway: '' },
+    { time: '5:50 PM', home: 'White', away: 'Purple', scoreHome: '', scoreAway: '' },
+    { time: '6:34 PM', home: 'Black', away: 'White', scoreHome: '', scoreAway: '' },
   ];
 }
 function defaultAwards() {
@@ -564,7 +564,10 @@ db.ref(ROOT).on('value', snap => {
     black:  data.teams?.black  ? Object.values(data.teams.black).map(p=>({...p,num:p.num||''}))  : [],
   };
   state.schedule = data.schedule ? Object.values(data.schedule) : defaultSchedule();
-  state.games    = data.games    ? Object.values(data.games)    : defaultGames();
+  const TEAM_REMAP = {'White':'Black','Yellow':'White','Black':'Purple'};
+  state.games = data.games
+    ? Object.values(data.games).map(g=>({...g, home: TEAM_REMAP[g.home]||g.home, away: TEAM_REMAP[g.away]||g.away}))
+    : defaultGames();
   state.awards   = data.awards   ? Object.values(data.awards)   : defaultAwards();
   // Scoresheets: array of 3 objects each with goals[] and penalties[]
   if (data.scoresheets) {
@@ -983,7 +986,7 @@ function completeGame(gi) {
 }
 
 function computeStandings(){
-  const TEAMS = ['White','Yellow','Black'];
+  const TEAMS = ['Black','White','Purple'];
   const t={};
   TEAMS.forEach(n=>{t[n]={gp:0,w:0,l:0,tie:0,pts:0,gf:0,ga:0};});
   // GP = completed games only
@@ -1008,7 +1011,7 @@ function computeStandings(){
     else if(a>h){t[an].w++;t[an].pts+=2;t[hn].l++;}
     else{t[hn].tie++;t[hn].pts++;t[an].tie++;t[an].pts++;}
   });
-  const colors={White:'#ddd',Yellow:'#6b3fa0',Black:'#888'};
+  const colors={Black:'#333',White:'#ddd',Purple:'#6b3fa0'};
   const rows=Object.entries(t).sort((a,b)=>b[1].pts-a[1].pts||(b[1].gf-b[1].ga)-(a[1].gf-a[1].ga));
   document.getElementById('standings-body').innerHTML=rows.map(([name,s])=>`
     <tr>
@@ -1083,7 +1086,7 @@ function buildOutputHTML(){
   }).join('');
 
   // standings
-  const ts={};['White','Yellow','Black'].forEach(n=>{ts[n]={gp:0,w:0,l:0,tie:0,pts:0,gf:0,ga:0};});
+  const ts={};['Black','White','Purple'].forEach(n=>{ts[n]={gp:0,w:0,l:0,tie:0,pts:0,gf:0,ga:0};});
   state.scoresheets.forEach((ss,i)=>{
     if(!ss.completed) return;
     const g=state.games[i]; if(!g) return;
@@ -1097,7 +1100,7 @@ function buildOutputHTML(){
     if(h>a){ts[hn].w++;ts[hn].pts+=2;ts[an].l++;}else if(a>h){ts[an].w++;ts[an].pts+=2;ts[hn].l++;}
     else{ts[hn].tie++;ts[hn].pts++;ts[an].tie++;ts[an].pts++;}
   });
-  const tColors={White:'#333',Yellow:'#ddd',Black:'#6b3fa0'};
+  const tColors={Black:'#333',White:'#ddd',Purple:'#6b3fa0'};
   const standRows=Object.entries(ts).sort((a,b)=>b[1].pts-a[1].pts).map(([name,s])=>`
     <tr>
       <td style="padding:8px 10px;border-bottom:1px solid #252525"><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${tColors[name]||'#888'};margin-right:8px"></span>${name}</td>
@@ -1294,7 +1297,7 @@ function openSecondScreen(){
     }).join('');
 
     // ── Standings — GP = completed games only ──
-    const ts={};['White','Yellow','Black'].forEach(n=>{ts[n]={gp:0,w:0,l:0,tie:0,pts:0,gf:0,ga:0};});
+    const ts={};['Black','White','Purple'].forEach(n=>{ts[n]={gp:0,w:0,l:0,tie:0,pts:0,gf:0,ga:0};});
     // Count completed games per team
     s.scoresheets.forEach((ss,i)=>{
       if(!ss.completed) return;
@@ -1318,7 +1321,7 @@ function openSecondScreen(){
       else if(a>h){ts[an].w++;ts[an].pts+=2;ts[hn].l++;}
       else{ts[hn].tie++;ts[hn].pts++;ts[an].tie++;ts[an].pts++;}
     });
-    const tC={White:'#333',Yellow:'#ddd',Black:'#6b3fa0'};
+    const tC={Black:'#333',White:'#ddd',Purple:'#6b3fa0'};
     const srows=Object.entries(ts).sort((a,b)=>b[1].pts-a[1].pts).map(([n,x])=>
       '<tr>'
       +'<td style="text-align:left"><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:'+(tC[n]||'#888')+';margin-right:6px;vertical-align:middle"></span>'+n+'</td>'
@@ -1519,7 +1522,7 @@ const PENALTIES = [
   'Unsportsmanlike Conduct','Too Many Men','Delay of Game',
   'Embellishment','Fighting','Misconduct (10 min)','Game Misconduct'
 ];
-const TEAM_COLORS = { White:'#333', Yellow:'#ddd', Black:'#6b3fa0' };
+const TEAM_COLORS = { Black:'#333', White:'#ddd', Purple:'#6b3fa0' };
 const MIN_OPTIONS = [2, 4, 5, 10];
 
 function renderScoresheet() {
