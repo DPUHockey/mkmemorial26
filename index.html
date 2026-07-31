@@ -248,7 +248,7 @@ table tr:hover td{background:#222;}
   <div class="header-right">
     <div class="sync-dot" id="sync-dot" title="Firebase sync status"></div>
     <button class="admin-btn" id="admin-btn" onclick="toggleAdmin()">👁 VIEW</button>
-    <div class="ver-badge">v5.5</div>
+    <div class="ver-badge">v5.6</div>
   </div>
 </header>
 
@@ -1190,8 +1190,8 @@ function openSecondScreen(){
 
       /* ── SHARED HEADER ── */
       .hd{text-align:center;border-bottom:3px solid #6b3fa0;padding:5px 12px 5px;flex-shrink:0;}
-      .hd-title{font-size:clamp(18px,2.2vw,32px);font-weight:700;color:#fff;letter-spacing:3px;}
-      .hd-sub{font-size:clamp(9px,0.9vw,13px);color:#9b59d0;letter-spacing:2px;margin-top:2px;}
+      .hd-title{font-size:clamp(28px,3.5vw,52px);font-weight:700;color:#fff;letter-spacing:3px;}
+      .hd-sub{font-size:clamp(13px,1.4vw,20px);color:#9b59d0;letter-spacing:2px;margin-top:4px;}
 
       /* ── PAGE 1: ROSTERS + STANDINGS ── */
       #p1{padding:8px 12px 6px;gap:6px;isolation:isolate;position:relative;}
@@ -1413,31 +1413,25 @@ function openSecondScreen(){
 
   function sizeRows(){
     requestAnimationFrame(()=>{
+      // Compute font size from the tallest team roster
       let fs = 18;
+      let maxRows = 1;
+      document.querySelectorAll('.tbody').forEach(tb => {
+        const rows = tb.querySelectorAll('.pr');
+        if(rows.length > maxRows) maxRows = rows.length;
+      });
       const firstTbody = document.querySelector('.tbody');
       if(firstTbody){
-        const rows = firstTbody.querySelectorAll('.pr');
-        if(rows.length){
-          const avail = firstTbody.clientHeight;
-          const perRow = Math.floor(avail / (rows.length + 1));
-          fs = Math.min(Math.max(Math.floor(perRow * 0.65), 24), 60);
-        }
+        const avail = firstTbody.clientHeight;
+        const perRow = Math.floor(avail / (maxRows + 1));
+        fs = Math.min(Math.max(Math.floor(perRow * 0.65), 22), 58);
       }
+      // Apply same font size to ALL tbodies so they match
       document.querySelectorAll('.tbody').forEach(tb => { tb.style.fontSize = fs + 'px'; });
-      requestAnimationFrame(()=>{
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        ctx.font = fs + 'px Oswald';
-        let maxW = 0;
-        document.querySelectorAll('.pname').forEach(el => {
-          const w = ctx.measureText(el.textContent).width;
-          if(w > maxW) maxW = w;
-        });
-        maxW = Math.ceil(maxW) + 4;
-        document.querySelectorAll('.pname,.phdr-name').forEach(el => {
-          el.style.width = maxW + 'px';
-          el.style.flex = 'none';
-        });
+      // Let names expand naturally (flex:1) — no fixed width
+      document.querySelectorAll('.pname,.phdr-name').forEach(el => {
+        el.style.width = '';
+        el.style.flex = '1';
       });
     });
   }
