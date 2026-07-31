@@ -254,7 +254,7 @@ table tr:hover td{background:#222;}
   <div class="header-right">
     <div class="sync-dot" id="sync-dot" title="Firebase sync status"></div>
     <button class="admin-btn" id="admin-btn" onclick="toggleAdmin()">👁 VIEW</button>
-    <div class="ver-badge">v3.0</div>
+    <div class="ver-badge">v3.1</div>
   </div>
 </header>
 
@@ -1027,12 +1027,14 @@ function computeStandings(){
     if(t[g.home]) t[g.home].gp++;
     if(t[g.away]) t[g.away].gp++;
   });
-  // W/L/T/GF/GA from scores
-  state.games.forEach(g=>{
-    const h=parseInt(g.scoreHome),a=parseInt(g.scoreAway);
+  // W/L/T/GF/GA — only from completed games with actual scores entered
+  state.games.forEach((g,i)=>{
     const hn=g.home,an=g.away;
     if(!TEAMS.includes(hn)||!TEAMS.includes(an)) return;
-    if(isNaN(h)||isNaN(a))return;
+    if(g.scoreHome===''||g.scoreHome===null||g.scoreHome===undefined) return;
+    if(g.scoreAway===''||g.scoreAway===null||g.scoreAway===undefined) return;
+    const h=parseInt(g.scoreHome),a=parseInt(g.scoreAway);
+    if(isNaN(h)||isNaN(a)) return;
     t[hn].gf+=h;t[hn].ga+=a;t[an].gf+=a;t[an].ga+=h;
     if(h>a){t[hn].w++;t[hn].pts+=2;t[an].l++;}
     else if(a>h){t[an].w++;t[an].pts+=2;t[hn].l++;}
@@ -1115,9 +1117,12 @@ function buildOutputHTML(){
   // standings
   const ts={};['White','Yellow','Black'].forEach(n=>{ts[n]={gp:0,w:0,l:0,tie:0,pts:0,gf:0,ga:0};});
   state.games.forEach(g=>{
-    const h=parseInt(g.scoreHome),a=parseInt(g.scoreAway),hn=g.home,an=g.away;
+    const hn=g.home,an=g.away;
     if(!ts[hn]||!ts[an]) return;
-    if(isNaN(h)||isNaN(a))return;
+    if(g.scoreHome===''||g.scoreHome===null||g.scoreHome===undefined) return;
+    if(g.scoreAway===''||g.scoreAway===null||g.scoreAway===undefined) return;
+    const h=parseInt(g.scoreHome),a=parseInt(g.scoreAway);
+    if(isNaN(h)||isNaN(a)) return;
     ts[hn].gp++;ts[an].gp++;ts[hn].gf+=h;ts[hn].ga+=a;ts[an].gf+=a;ts[an].ga+=h;
     if(h>a){ts[hn].w++;ts[hn].pts+=2;ts[an].l++;}else if(a>h){ts[an].w++;ts[an].pts+=2;ts[hn].l++;}
     else{ts[hn].tie++;ts[hn].pts++;ts[an].tie++;ts[an].pts++;}
@@ -1190,8 +1195,8 @@ function openSecondScreen(){
       .hd-title{font-size:clamp(18px,2.2vw,32px);font-weight:700;color:#fff;letter-spacing:3px;}
       .hd-sub{font-size:clamp(9px,0.9vw,13px);color:#9b59d0;letter-spacing:2px;margin-top:2px;}
 
-      /* ── MAIN ROW: 3 roster cols (auto) + right panel (1fr) ── */
-      .main{display:grid;grid-template-columns:auto auto auto 1fr;gap:10px;min-height:0;align-items:stretch;}
+      /* ── MAIN ROW: 3 roster cols equal + right panel fixed ── */
+      .main{display:grid;grid-template-columns:1fr 1fr 1fr 380px;gap:10px;min-height:0;align-items:stretch;}
 
       /* Team columns */
       .tcol{display:flex;flex-direction:column;min-height:0;border-radius:6px;overflow:hidden;}
@@ -1205,7 +1210,7 @@ function openSecondScreen(){
       .pr{display:flex;align-items:center;padding:1px 0;border-bottom:1px solid #1a1a1a;white-space:nowrap;}
       .pr:last-child{border-bottom:none;}
       .pnum{font-weight:700;color:#F5C800;width:36px;text-align:right;flex-shrink:0;margin-right:8px;}
-      .pname{font-weight:600;color:#fff;flex-shrink:0;}
+      .pname{font-weight:600;color:#fff;flex:1;overflow:hidden;text-overflow:ellipsis;}
       .ppos{color:#aaa;flex-shrink:0;margin-left:8px;}
       .phdr{display:flex;align-items:center;padding:2px 0;border-bottom:2px solid #2a2a2a;white-space:nowrap;color:#555;letter-spacing:1px;}
       .phdr-num{width:36px;text-align:right;flex-shrink:0;margin-right:8px;font-size:.7em;}
@@ -1315,10 +1320,14 @@ function openSecondScreen(){
       if(!ts[hn]||!ts[an]) return;
       ts[hn].gp++; ts[an].gp++;
     });
-    // Tally W/L/T/GF/GA from scores
+    // Tally W/L/T/GF/GA — only when scores actually entered
     s.games.forEach(g=>{
-      const h=parseInt(g.scoreHome),a=parseInt(g.scoreAway),hn=g.home,an=g.away;
-      if(!ts[hn]||!ts[an]||isNaN(h)||isNaN(a))return;
+      const hn=g.home,an=g.away;
+      if(!ts[hn]||!ts[an]) return;
+      if(g.scoreHome===''||g.scoreHome===null||g.scoreHome===undefined) return;
+      if(g.scoreAway===''||g.scoreAway===null||g.scoreAway===undefined) return;
+      const h=parseInt(g.scoreHome),a=parseInt(g.scoreAway);
+      if(isNaN(h)||isNaN(a)) return;
       ts[hn].gf+=h;ts[hn].ga+=a;ts[an].gf+=a;ts[an].ga+=h;
       if(h>a){ts[hn].w++;ts[hn].pts+=2;ts[an].l++;}
       else if(a>h){ts[an].w++;ts[an].pts+=2;ts[hn].l++;}
@@ -1390,39 +1399,35 @@ function openSecondScreen(){
 
   function sizeRows(){
     requestAnimationFrame(()=>{
-      // Step 1: calculate font size from first column's available height
-      let fs = 18; // default
+      let fs = 18;
       const firstTbody = document.querySelector('.tbody');
       if(firstTbody){
         const rows = firstTbody.querySelectorAll('.pr');
         if(rows.length){
           const avail = firstTbody.clientHeight;
-          const perRow = Math.floor(avail / (rows.length + 1)); // +1 for header
+          const perRow = Math.floor(avail / (rows.length + 1));
           fs = Math.min(Math.max(Math.floor(perRow * 0.65), 12), 30);
         }
       }
-
-      // Step 2: set font size on all tbodys
       document.querySelectorAll('.tbody').forEach(tb => { tb.style.fontSize = fs + 'px'; });
 
-      // Step 3: measure longest name across ALL rosters using canvas
       requestAnimationFrame(()=>{
+        // Measure longest name across all rosters for uniform POS column
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
-        ctx.font = 'bold ' + fs + 'px Oswald, sans-serif';
-
+        ctx.font = '600 ' + fs + 'px Oswald, sans-serif';
         let maxW = 0;
         document.querySelectorAll('.pname').forEach(el => {
           const w = ctx.measureText(el.textContent).width;
           if(w > maxW) maxW = w;
         });
-        maxW = Math.ceil(maxW) + 2; // tiny buffer
-
-        // Step 4: apply that fixed width to every .pname and .phdr-name
-        document.querySelectorAll('.pname').forEach(el => { el.style.width = maxW + 'px'; });
-        document.querySelectorAll('.phdr-name').forEach(el => { el.style.width = maxW + 'px'; });
-
-        // Step 5: set pnum width based on font size
+        maxW = Math.ceil(maxW) + 4;
+        // Set all pname to same fixed width so POS aligns
+        document.querySelectorAll('.pname,.phdr-name').forEach(el => {
+          el.style.width = maxW + 'px';
+          el.style.flex = 'none';
+        });
+        // pnum width from font size
         const numW = Math.round(fs * 2.0);
         document.querySelectorAll('.pnum,.phdr-num').forEach(el => { el.style.width = numW + 'px'; });
       });
