@@ -248,7 +248,7 @@ table tr:hover td{background:#222;}
   <div class="header-right">
     <div class="sync-dot" id="sync-dot" title="Firebase sync status"></div>
     <button class="admin-btn" id="admin-btn" onclick="toggleAdmin()">👁 VIEW</button>
-    <div class="ver-badge">v4.3</div>
+    <div class="ver-badge">v4.4</div>
   </div>
 </header>
 
@@ -311,15 +311,15 @@ table tr:hover td{background:#222;}
       <p class="tip" id="roster-tip">Desktop: drag players into teams. Mobile: tap <strong style="color:var(--purple-light)">Assign</strong>. Currently in <span id="mode-label">View</span> mode.</p>
       <div class="teams-grid">
         <div class="team-panel white-team panel">
-          <div class="team-header"><h3>⬛ BLACK</h3><span class="team-count" id="white-count">0</span></div>
+          <div class="team-header">⬛ BLACK<span class="team-count" id="white-count">0</span></div>
           <div class="drop-zone" id="drop-white" ondragover="onDragOver(event,'white')" ondragleave="onDragLeave(event,'white')" ondrop="onDrop(event,'white')"><div class="empty-hint">Drop players here</div></div>
         </div>
         <div class="team-panel yellow-team panel">
-          <div class="team-header"><h3>⬜ WHITE</h3><span class="team-count" id="yellow-count">0</span></div>
+          <div class="team-header">⬜ WHITE<span class="team-count" id="yellow-count">0</span></div>
           <div class="drop-zone" id="drop-yellow" ondragover="onDragOver(event,'yellow')" ondragleave="onDragLeave(event,'yellow')" ondrop="onDrop(event,'yellow')"><div class="empty-hint">Drop players here</div></div>
         </div>
         <div class="team-panel black-team panel">
-          <div class="team-header"><h3>🟣 PURPLE</h3><span class="team-count" id="black-count">0</span></div>
+          <div class="team-header">🟣 PURPLE<span class="team-count" id="black-count">0</span></div>
           <div class="drop-zone" id="drop-black" ondragover="onDragOver(event,'black')" ondragleave="onDragLeave(event,'black')" ondrop="onDrop(event,'black')"><div class="empty-hint">Drop players here</div></div>
         </div>
       </div>
@@ -527,9 +527,9 @@ function defaultSchedule() {
 }
 function defaultGames() {
   return [
-    { time: '5:15 PM', home: 'Black', away: 'Purple',  scoreHome: '', scoreAway: '' },
-    { time: '5:50 PM', home: 'White', away: 'Purple', scoreHome: '', scoreAway: '' },
-    { time: '6:34 PM', home: 'Black', away: 'White', scoreHome: '', scoreAway: '' },
+    { time: '5:15 PM', home: 'Purple', away: 'Purple',  scoreHome: '', scoreAway: '' },
+    { time: '5:50 PM', home: 'Purple', away: 'Purple', scoreHome: '', scoreAway: '' },
+    { time: '6:34 PM', home: 'Purple', away: 'Purple', scoreHome: '', scoreAway: '' },
   ];
 }
 function defaultAwards() {
@@ -564,9 +564,9 @@ db.ref(ROOT).on('value', snap => {
     black:  data.teams?.black  ? Object.values(data.teams.black).map(p=>({...p,num:p.num||''}))  : [],
   };
   state.schedule = data.schedule ? Object.values(data.schedule) : defaultSchedule();
-  const TEAM_REMAP = {'White':'Black','Yellow':'White','Black':'Purple'};
+  const _TR={'White':'Black','Yellow':'White','Black':'Purple'};
   state.games = data.games
-    ? Object.values(data.games).map(g=>({...g, home: TEAM_REMAP[g.home]||g.home, away: TEAM_REMAP[g.away]||g.away}))
+    ? Object.values(data.games).map(g=>({...g,home:_TR[g.home]||g.home,away:_TR[g.away]||g.away}))
     : defaultGames();
   state.awards   = data.awards   ? Object.values(data.awards)   : defaultAwards();
   // Scoresheets: array of 3 objects each with goals[] and penalties[]
