@@ -790,7 +790,10 @@ function teamCard(p,i,team) {
   return `<div class="team-player" draggable="true" data-id="${p.id}" data-source="${team}"
     ondragstart="onDragStart(event,'${p.id}','${team}')" ondragend="onDragEnd(event)">
     <span class="drag-handle" style="color:#555;font-size:13px;flex-shrink:0;cursor:grab">⠿</span>
-    <span class="player-name" style="flex:1;font-size:12px">${esc(p.name)}</span>
+    <input data-field="name" data-id="${p.id}" data-team="${team}"
+      value="${escAttr(p.name)}"
+      style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:2px 5px;border-radius:4px;font-size:12px;font-family:'Oswald',sans-serif;flex:1;min-width:0"
+      oninput="liveEditTeam('${p.id}','${team}','name',this.value)">
     <select data-field="pos" data-id="${p.id}" data-team="${team}"
       style="background:#1a1a1a;border:1px solid #333;color:#aaa;padding:2px 3px;border-radius:4px;font-size:11px;font-family:'Oswald',sans-serif;flex-shrink:0"
       onchange="liveEditTeam('${p.id}','${team}','pos',this.value)">
