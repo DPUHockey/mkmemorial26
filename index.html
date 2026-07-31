@@ -565,7 +565,7 @@ db.ref(ROOT).on('value', snap => {
     yellow: data.teams?.yellow ? Object.values(data.teams.yellow).map(p=>({...p,num:p.num||''})) : [],
     black:  data.teams?.black  ? Object.values(data.teams.black).map(p=>({...p,num:p.num||''}))  : [],
   };
-  state.schedule = data.schedule ? Object.values(data.schedule) : defaultSchedule();
+  state.schedule = data.schedule ? Object.values(data.schedule).map(x=>({...x,time:x.time.replace(/^~/,'')})) : defaultSchedule();
   state.games = data.games ? Object.values(data.games) : defaultGames();
   const REMOVED_AWARDS = ['Best Goalie','Most Goals','Most Assists','Fan Favorite'];
   const rawAwards = data.awards ? Object.values(data.awards) : defaultAwards();
@@ -1286,7 +1286,7 @@ function openSecondScreen(){
         yellow: data.teams?.yellow ? Object.values(data.teams.yellow).map(p=>({...p,num:p.num||''})) : [],
         black:  data.teams?.black  ? Object.values(data.teams.black).map(p=>({...p,num:p.num||''}))  : []
       },
-      schedule: data.schedule ? Object.values(data.schedule) : [],
+      schedule: data.schedule ? Object.values(data.schedule).map(x=>({...x,time:x.time.replace(/^~/,'')})) : [],
       games:    data.games    ? Object.values(data.games)    : [],
       awards:   data.awards   ? Object.values(data.awards)   : [],
       scoresheets: data.scoresheets ? [0,1,2].map(i=>{
