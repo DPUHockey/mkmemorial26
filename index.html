@@ -1040,8 +1040,6 @@ function computeStandings(){
   });
   // W/L/T/GF/GA — only from completed games with actual scores entered
   state.games.forEach((g,i)=>{
-    const ss=state.scoresheets[i];
-    if(!ss||!ss.completed) return;
     const hn=g.home,an=g.away;
     if(!TEAMS.includes(hn)||!TEAMS.includes(an)) return;
     if(g.scoreHome===''||g.scoreHome===null||g.scoreHome===undefined) return;
@@ -1129,7 +1127,9 @@ function buildOutputHTML(){
 
   // standings
   const ts={};['White','Yellow','Black'].forEach(n=>{ts[n]={gp:0,w:0,l:0,tie:0,pts:0,gf:0,ga:0};});
-  state.games.forEach(g=>{
+  state.scoresheets.forEach((ss,i)=>{
+    if(!ss.completed) return;
+    const g=state.games[i]; if(!g) return;
     const hn=g.home,an=g.away;
     if(!ts[hn]||!ts[an]) return;
     if(g.scoreHome===''||g.scoreHome===null||g.scoreHome===undefined) return;
@@ -1373,8 +1373,10 @@ function openSecondScreen(){
       if(!ts[hn]||!ts[an]) return;
       ts[hn].gp++; ts[an].gp++;
     });
-    // Tally W/L/T/GF/GA — only when scores actually entered
-    s.games.forEach(g=>{
+    // Tally W/L/T/GF/GA — only when scores actually entered and game is completed
+    s.games.forEach((g,i)=>{
+      const ss=s.scoresheets[i];
+      if(!ss||!ss.completed) return;
       const hn=g.home,an=g.away;
       if(!ts[hn]||!ts[an]) return;
       if(g.scoreHome===''||g.scoreHome===null||g.scoreHome===undefined) return;
