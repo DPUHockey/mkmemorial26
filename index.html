@@ -248,7 +248,7 @@ table tr:hover td{background:#222;}
   <div class="header-right">
     <div class="sync-dot" id="sync-dot" title="Firebase sync status"></div>
     <button class="admin-btn" id="admin-btn" onclick="toggleAdmin()">👁 VIEW</button>
-    <div class="ver-badge">v4.9</div>
+    <div class="ver-badge">v5.0</div>
   </div>
 </header>
 
@@ -565,7 +565,7 @@ db.ref(ROOT).on('value', snap => {
     yellow: data.teams?.yellow ? Object.values(data.teams.yellow).map(p=>({...p,num:p.num||''})) : [],
     black:  data.teams?.black  ? Object.values(data.teams.black).map(p=>({...p,num:p.num||''}))  : [],
   };
-  state.schedule = data.schedule ? Object.values(data.schedule).map(x=>({...x,time:x.time.replace(/^~/,'')})) : defaultSchedule();
+  state.schedule = data.schedule ? Object.values(data.schedule).map(x=>({...x,time:String(x.time||'').replace(/^~/,'')})) : defaultSchedule();
   state.games = data.games ? Object.values(data.games) : defaultGames();
   const REMOVED_AWARDS = ['Best Goalie','Most Goals','Most Assists','Fan Favorite'];
   const rawAwards = data.awards ? Object.values(data.awards) : defaultAwards();
@@ -1286,7 +1286,7 @@ function openSecondScreen(){
         yellow: data.teams?.yellow ? Object.values(data.teams.yellow).map(p=>({...p,num:p.num||''})) : [],
         black:  data.teams?.black  ? Object.values(data.teams.black).map(p=>({...p,num:p.num||''}))  : []
       },
-      schedule: data.schedule ? Object.values(data.schedule).map(x=>({...x,time:x.time.replace(/^~/,'')})) : [],
+      schedule: data.schedule ? Object.values(data.schedule).map(x=>({...x,time:String(x.time||'').replace(/^~/,'')})).sort((a,b)=>a.time.localeCompare(b.time)) : [],
       games:    data.games    ? Object.values(data.games)    : [],
       awards:   data.awards   ? Object.values(data.awards)   : [],
       scoresheets: data.scoresheets ? [0,1,2].map(i=>{
