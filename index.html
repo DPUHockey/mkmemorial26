@@ -254,7 +254,7 @@ table tr:hover td{background:#222;}
   <div class="header-right">
     <div class="sync-dot" id="sync-dot" title="Firebase sync status"></div>
     <button class="admin-btn" id="admin-btn" onclick="toggleAdmin()">👁 VIEW</button>
-    <div class="ver-badge">v3.1</div>
+    <div class="ver-badge">v3.2</div>
   </div>
 </header>
 
@@ -362,7 +362,10 @@ table tr:hover td{background:#222;}
   <div class="standings-section">
     <div class="section-title">Scores &amp; Standings</div>
     <div class="panel" style="margin-bottom:16px">
-      <div class="panel-header"><h3>Game Scores</h3></div>
+      <div class="panel-header">
+        <h3>Game Scores</h3>
+        <button class="btn btn-sm" id="reset-scores-btn" style="background:#2a2a2a;color:#888;border:1px solid #444;margin-left:auto" onclick="resetScores()">Reset Scores</button>
+      </div>
       <div id="game-scores-list" style="padding:10px 14px"></div>
     </div>
     <div class="panel">
@@ -1010,6 +1013,14 @@ function renderStandings(){
     </div>`).join('');
   computeStandings();
 }
+function resetScores() {
+  if (!isAdmin) { showReadonlyHint(); return; }
+  if (!confirm('Clear all game scores back to blank? This also resets scoresheets.')) return;
+  state.games.forEach(g => { g.scoreHome = ''; g.scoreAway = ''; });
+  state.scoresheets = defaultScoresheets();
+  pushState();
+}
+
 function completeGame(gi) {
   if (!isAdmin) return;
   state.scoresheets[gi].completed = !state.scoresheets[gi].completed;
@@ -1195,8 +1206,8 @@ function openSecondScreen(){
       .hd-title{font-size:clamp(18px,2.2vw,32px);font-weight:700;color:#fff;letter-spacing:3px;}
       .hd-sub{font-size:clamp(9px,0.9vw,13px);color:#9b59d0;letter-spacing:2px;margin-top:2px;}
 
-      /* ── MAIN ROW: 3 roster cols equal + right panel fixed ── */
-      .main{display:grid;grid-template-columns:1fr 1fr 1fr 380px;gap:10px;min-height:0;align-items:stretch;}
+      /* ── MAIN ROW: rosters take ~half, right panel takes ~half ── */
+      .main{display:grid;grid-template-columns:1fr 1fr 1fr 3fr;gap:10px;min-height:0;align-items:stretch;}
 
       /* Team columns */
       .tcol{display:flex;flex-direction:column;min-height:0;border-radius:6px;overflow:hidden;}
@@ -1225,27 +1236,27 @@ function openSecondScreen(){
 
       /* Standings — fixed col widths so numbers align under headings */
       table{width:100%;border-collapse:collapse;table-layout:fixed;}
-      table th{padding:5px 0;color:#9b59d0;font-size:clamp(10px,0.95vw,13px);letter-spacing:1px;border-bottom:1px solid #6b3fa0;text-align:center;}
+      table th{padding:6px 0;color:#9b59d0;font-size:clamp(11px,1.1vw,16px);letter-spacing:1px;border-bottom:1px solid #6b3fa0;text-align:center;}
       table th:first-child{text-align:left;padding-left:4px;}
-      table td{padding:6px 0;border-bottom:1px solid #1a1a1a;color:#ccc;font-size:clamp(12px,1.2vw,17px);text-align:center;}
+      table td{padding:8px 0;border-bottom:1px solid #1a1a1a;color:#ccc;font-size:clamp(15px,1.5vw,22px);text-align:center;}
       table td:first-child{text-align:left;padding-left:4px;}
-      .pts-cell{font-weight:700;color:#F5C800;font-size:clamp(13px,1.3vw,19px);}
+      .pts-cell{font-weight:700;color:#F5C800;font-size:clamp(16px,1.7vw,24px);}
 
       /* Score rows */
-      .gr{display:flex;align-items:center;gap:6px;padding:6px 0;border-bottom:1px solid #1a1a1a;}
+      .gr{display:flex;align-items:center;gap:6px;padding:7px 0;border-bottom:1px solid #1a1a1a;}
       .gr:last-child{border-bottom:none;}
-      .gtime{color:#F5C800;font-weight:600;width:68px;flex-shrink:0;font-size:clamp(11px,1vw,14px);}
-      .gteam{flex:1;font-weight:600;color:#fff;font-size:clamp(12px,1.2vw,17px);}
+      .gtime{color:#F5C800;font-weight:600;width:72px;flex-shrink:0;font-size:clamp(12px,1.1vw,16px);}
+      .gteam{flex:1;font-weight:600;color:#fff;font-size:clamp(14px,1.4vw,20px);}
       .gteam.right{text-align:right;}
-      .gscore{background:#222;padding:4px 10px;border-radius:5px;font-size:clamp(16px,1.8vw,24px);font-weight:700;color:#fff;min-width:60px;text-align:center;flex-shrink:0;}
+      .gscore{background:#222;padding:5px 12px;border-radius:5px;font-size:clamp(20px,2.2vw,30px);font-weight:700;color:#fff;min-width:70px;text-align:center;flex-shrink:0;}
 
       /* Leaders */
-      .lrow{display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid #1a1a1a;font-size:clamp(12px,1.2vw,17px);}
+      .lrow{display:flex;align-items:center;gap:6px;padding:7px 0;border-bottom:1px solid #1a1a1a;font-size:clamp(14px,1.4vw,20px);}
       .lrow:last-child{border-bottom:none;}
-      .ldot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+      .ldot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
       .lname{flex:1;font-weight:600;color:#fff;}
-      .lpts{font-weight:700;color:#F5C800;min-width:44px;text-align:right;}
-      .lga{color:#888;font-size:.8em;min-width:52px;text-align:right;}
+      .lpts{font-weight:700;color:#F5C800;min-width:50px;text-align:right;}
+      .lga{color:#888;font-size:.82em;min-width:56px;text-align:right;}
 
       /* ── BOTTOM ROW: schedule + awards ── */
       .bot{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
@@ -1487,9 +1498,8 @@ function renderActiveScoresheetGame() {
     if (goal.team === away) awayScore++;
   });
 
-  // Sync scores back to games array (auto-updates standings)
-  if (state.games[activeGame].scoreHome !== String(homeScore) ||
-      state.games[activeGame].scoreAway !== String(awayScore)) {
+  // Only sync score back to games if goals have been logged
+  if (ss.goals.length > 0) {
     state.games[activeGame].scoreHome = String(homeScore);
     state.games[activeGame].scoreAway = String(awayScore);
   }
