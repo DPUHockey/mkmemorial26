@@ -254,7 +254,7 @@ table tr:hover td{background:#222;}
   <div class="header-right">
     <div class="sync-dot" id="sync-dot" title="Firebase sync status"></div>
     <button class="admin-btn" id="admin-btn" onclick="toggleAdmin()">👁 VIEW</button>
-    <div class="ver-badge">v3.3</div>
+    <div class="ver-badge">v3.4</div>
   </div>
 </header>
 
@@ -1040,6 +1040,8 @@ function computeStandings(){
   });
   // W/L/T/GF/GA — only from completed games with actual scores entered
   state.games.forEach((g,i)=>{
+    const ss=state.scoresheets[i];
+    if(!ss||!ss.completed) return;
     const hn=g.home,an=g.away;
     if(!TEAMS.includes(hn)||!TEAMS.includes(an)) return;
     if(g.scoreHome===''||g.scoreHome===null||g.scoreHome===undefined) return;
