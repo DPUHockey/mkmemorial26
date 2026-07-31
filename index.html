@@ -248,7 +248,7 @@ table tr:hover td{background:#222;}
   <div class="header-right">
     <div class="sync-dot" id="sync-dot" title="Firebase sync status"></div>
     <button class="admin-btn" id="admin-btn" onclick="toggleAdmin()">👁 VIEW</button>
-    <div class="ver-badge">v4.5</div>
+    <div class="ver-badge">v4.6</div>
   </div>
 </header>
 
@@ -304,6 +304,7 @@ table tr:hover td{background:#222;}
       </div>
       <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap" id="admin-only-btns">
         <button class="btn btn-sm btn-purple" onclick="clearAll()" style="opacity:.7">Clear All Data</button>
+        <button class="btn btn-sm" onclick="resetToDefaults()" style="background:#b03000;color:#fff;border:none">🔄 Reset Schedule / Games / Awards</button>
       </div>
     </div>
     <div>
@@ -710,6 +711,18 @@ function clearAll() {
   if (!confirm('Clear ALL data and reset to defaults? This cannot be undone.')) return;
   state = { holding:[], teams:{white:[],yellow:[],black:[]}, schedule:defaultSchedule(), games:defaultGames(), awards:defaultAwards() };
   pushState();
+}
+
+function resetToDefaults() {
+  if (!isAdmin) return;
+  if (!confirm('Reset Schedule, Games, and Awards to defaults?\nRosters will NOT be affected.')) return;
+  state.schedule = defaultSchedule();
+  state.games    = defaultGames();
+  state.awards   = defaultAwards();
+  pushState();
+  renderSchedule && renderSchedule();
+  renderAwards   && renderAwards();
+  alert('Done! Schedule, Games & Awards reset to defaults.');
 }
 
 function renderHolding() {
