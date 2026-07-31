@@ -248,7 +248,7 @@ table tr:hover td{background:#222;}
   <div class="header-right">
     <div class="sync-dot" id="sync-dot" title="Firebase sync status"></div>
     <button class="admin-btn" id="admin-btn" onclick="toggleAdmin()">👁 VIEW</button>
-    <div class="ver-badge">v3.9</div>
+    <div class="ver-badge">v4.0</div>
   </div>
 </header>
 
@@ -565,13 +565,7 @@ db.ref(ROOT).on('value', snap => {
   };
   state.schedule = data.schedule ? Object.values(data.schedule) : defaultSchedule();
   state.games    = data.games    ? Object.values(data.games)    : defaultGames();
-  const REMOVED_AWARDS = ['Best Goalie','Most Goals','Most Assists','Fan Favorite'];
-  const rawAwards = data.awards ? Object.values(data.awards) : defaultAwards();
-  // Merge: keep live awards, filter removed ones, add any new defaults missing
-  const liveNames = new Set(rawAwards.map(a=>a.name));
-  const merged = rawAwards.filter(a=>!REMOVED_AWARDS.includes(a.name));
-  defaultAwards().forEach(da=>{ if(!liveNames.has(da.name) && !REMOVED_AWARDS.includes(da.name)) merged.push(da); });
-  state.awards = merged;
+  state.awards   = data.awards   ? Object.values(data.awards)   : defaultAwards();
   // Scoresheets: array of 3 objects each with goals[] and penalties[]
   if (data.scoresheets) {
     const ss = Object.values(data.scoresheets);
@@ -1163,8 +1157,8 @@ function openSecondScreen(){
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"><\/script>
     <style>
       *{box-sizing:border-box;margin:0;padding:0;}
-      html{width:100vw;height:100vh;overflow:hidden;background:#000;}
-      body{width:100vw;height:100vh;overflow:hidden;color:#fff;font-family:Oswald,sans-serif;display:grid;grid-template-rows:auto 2fr auto;padding:8px 12px 6px;gap:6px;isolation:isolate;position:relative;}
+      html,body{width:100vw;height:100vh;overflow:hidden;background:#000;color:#fff;font-family:Oswald,sans-serif;}
+      body{display:grid;grid-template-rows:auto 2fr auto;padding:8px 12px 6px;gap:6px;}
 
       /* ── HEADER ── */
       .hd{text-align:center;border-bottom:3px solid #6b3fa0;padding-bottom:5px;}
@@ -1187,10 +1181,10 @@ function openSecondScreen(){
       .t-yellow .tbody{background:rgba(18,14,0,0.55);border-left:3px solid #F5C800;border-right:3px solid #F5C800;border-bottom:3px solid #F5C800;}
       .t-black .tbody{background:rgba(8,8,8,0.55);border-left:3px solid #444;border-right:3px solid #444;border-bottom:3px solid #444;}
       /* Canvas sits behind everything */
-      #bgCanvas{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:-1;pointer-events:none;display:block;}
+      #bgCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none;}
 
       /* Player rows */
-      .pr{display:flex;align-items:center;padding:1px 0;border-bottom:1px solid rgba(255,255,255,0.06);white-space:nowrap;}
+      .pr{display:flex;align-items:center;padding:1px 0;border-bottom:1px solid rgba(255,255,255,0.06);white-space:nowrap;position:relative;z-index:1;}
       .pr:last-child{border-bottom:none;}
       .pnum{font-weight:700;color:#F5C800;width:36px;text-align:right;flex-shrink:0;margin-right:8px;}
       .t-white .pnum{color:#c9a200;}
@@ -1199,7 +1193,7 @@ function openSecondScreen(){
       .ppos{color:#aaa;flex-shrink:0;margin-left:8px;font-weight:600;}
       .t-yellow .ppos{color:#c9a200;}
       .t-white .ppos{color:#888;}
-      .phdr{display:flex;align-items:center;padding:2px 0;border-bottom:2px solid rgba(255,255,255,0.12);white-space:nowrap;color:rgba(255,255,255,0.3);letter-spacing:1px;}
+      .phdr{display:flex;align-items:center;padding:2px 0;border-bottom:2px solid rgba(255,255,255,0.12);white-space:nowrap;color:rgba(255,255,255,0.3);letter-spacing:1px;position:relative;z-index:1;}
       .t-white .phdr{color:rgba(0,0,0,0.3);}
       .phdr-num{width:36px;text-align:right;flex-shrink:0;margin-right:8px;font-size:.7em;}
       .phdr-name{flex-shrink:0;font-size:.7em;}
@@ -1401,56 +1395,105 @@ function openSecondScreen(){
       });
     });
   }
-  // Smoke + Lightning
+  // Lightning — full screen, once every 15-20s
   (function(){
     const cv=document.getElementById('bgCanvas');
     const ctx=cv.getContext('2d');
     function resize(){cv.width=window.innerWidth;cv.height=window.innerHeight;}
     resize(); window.addEventListener('resize',resize);
-    const smokes=[];
-    for(let i=0;i<70;i++) smokes.push({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:Math.random()*130+50,vx:(Math.random()-.5)*.25,vy:-(Math.random()*.35+.08),a:Math.random()*.08+.03,da:(Math.random()-.5)*.0004});
-    let bolts=[],nextBolt=Date.now()+rnd(800,2500);
+    let bolts=[];
+    let nextBolt=Date.now()+rnd(2000,4000); // first one soon so you see it on load
     function rnd(a,b){return Math.random()*(b-a)+a;}
     function makeBolt(){
-      const x=rnd(cv.width*.05,cv.width*.95),segs=[];
+      const x=rnd(cv.width*.1,cv.width*.9),segs=[];
       let cx=x,cy=0;
-      while(cy<cv.height*.8){cy+=rnd(25,65);cx+=rnd(-55,55);segs.push({x:cx,y:cy});}
+      while(cy<cv.height*.85){cy+=rnd(25,65);cx+=rnd(-60,60);segs.push({x:cx,y:cy});}
       const branches=[];
-      if(Math.random()<.55 && segs.length>2){
-        let bx=segs[Math.floor(segs.length/2)].x, by=segs[Math.floor(segs.length/2)].y, bs=[{x:bx,y:by}];
+      if(Math.random()<.6 && segs.length>2){
+        const bi=Math.floor(segs.length/2);
+        let bx=segs[bi].x,by=segs[bi].y,bs=[{x:bx,y:by}];
         for(let k=0;k<rnd(2,5);k++){bx+=rnd(-45,45);by+=rnd(20,50);bs.push({x:bx,y:by});}
         branches.push(bs);
       }
-      bolts.push({segs,branches,life:rnd(50,120),maxLife:rnd(50,120),color:Math.random()<.5?'#b060ff':'#F5C800'});
+      const color=Math.random()<.5?'#c070ff':'#F5C800';
+      // A bolt flashes bright then fades — short life, high initial alpha
+      bolts.push({segs,branches,life:45,maxLife:45,color});
     }
     function drawBolt(b){
       const a=b.life/b.maxLife;
       ctx.save(); ctx.strokeStyle=b.color; ctx.shadowColor=b.color;
-      ctx.globalAlpha=a*.2; ctx.lineWidth=16; ctx.shadowBlur=40;
+      // wide glow pass
+      ctx.globalAlpha=a*.25; ctx.lineWidth=18; ctx.shadowBlur=50;
       ctx.beginPath(); ctx.moveTo(b.segs[0].x,0); b.segs.forEach(s=>ctx.lineTo(s.x,s.y)); ctx.stroke();
-      ctx.globalAlpha=a; ctx.lineWidth=1.5; ctx.shadowBlur=10;
+      // mid glow
+      ctx.globalAlpha=a*.5; ctx.lineWidth=5; ctx.shadowBlur=20;
       ctx.beginPath(); ctx.moveTo(b.segs[0].x,0); b.segs.forEach(s=>ctx.lineTo(s.x,s.y)); ctx.stroke();
-      b.branches.forEach(br=>{ctx.beginPath();ctx.moveTo(br[0].x,br[0].y);br.slice(1).forEach(s=>ctx.lineTo(s.x,s.y));ctx.globalAlpha=a*.45;ctx.lineWidth=.8;ctx.stroke();});
+      // bright core
+      ctx.globalAlpha=a*.95; ctx.lineWidth=1.5; ctx.shadowBlur=6;
+      ctx.strokeStyle='#fff';
+      ctx.beginPath(); ctx.moveTo(b.segs[0].x,0); b.segs.forEach(s=>ctx.lineTo(s.x,s.y)); ctx.stroke();
+      // branches
+      ctx.strokeStyle=b.color; ctx.shadowColor=b.color;
+      b.branches.forEach(br=>{
+        ctx.beginPath();ctx.moveTo(br[0].x,br[0].y);br.slice(1).forEach(s=>ctx.lineTo(s.x,s.y));
+        ctx.globalAlpha=a*.4;ctx.lineWidth=.8;ctx.shadowBlur=8;ctx.stroke();
+      });
       ctx.restore();
     }
     function frame(){
       ctx.clearRect(0,0,cv.width,cv.height);
-      smokes.forEach(s=>{
-        s.x+=s.vx; s.y+=s.vy; s.a+=s.da;
-        if(s.a<.02)s.a=.02; if(s.a>.1)s.a=.1;
-        if(s.y+s.r<0){s.y=cv.height+s.r; s.x=Math.random()*cv.width;}
-        const g=ctx.createRadialGradient(s.x,s.y,0,s.x,s.y,s.r);
-        g.addColorStop(0,'rgba(90,50,130,'+s.a+')');
-        g.addColorStop(.5,'rgba(35,20,60,'+(s.a*.5)+')');
-        g.addColorStop(1,'rgba(0,0,0,0)');
-        ctx.fillStyle=g; ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2); ctx.fill();
-      });
-      if(Date.now()>nextBolt){makeBolt(); nextBolt=Date.now()+rnd(700,2800);}
+      if(Date.now()>nextBolt){makeBolt(); nextBolt=Date.now()+rnd(15000,20000);}
       bolts=bolts.filter(b=>b.life>0);
       bolts.forEach(b=>{drawBolt(b); b.life--;});
       requestAnimationFrame(frame);
     }
     frame();
+  })();
+
+  // Smoke — inside each roster .tbody only, using per-canvas elements
+  (function(){
+    function rnd(a,b){return Math.random()*(b-a)+a;}
+    function initSmoke(canvas){
+      const ctx=canvas.getContext('2d');
+      const W=canvas.width,H=canvas.height;
+      const particles=[];
+      for(let i=0;i<18;i++) particles.push({
+        x:rnd(0,W), y:rnd(H*.3,H),
+        r:rnd(30,70), vx:(Math.random()-.5)*.3, vy:-(Math.random()*.5+.15),
+        a:rnd(.06,.14), da:(Math.random()-.5)*.0006
+      });
+      function frame(){
+        ctx.clearRect(0,0,W,H);
+        particles.forEach(p=>{
+          p.x+=p.vx; p.y+=p.vy; p.a+=p.da;
+          if(p.a<.04)p.a=.04; if(p.a>.16)p.a=.16;
+          if(p.y+p.r<0){p.y=H+p.r; p.x=rnd(0,W); p.vy=-(Math.random()*.5+.15);}
+          const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r);
+          g.addColorStop(0,'rgba(110,60,160,'+p.a+')');
+          g.addColorStop(.5,'rgba(55,25,85,'+(p.a*.6)+')');
+          g.addColorStop(1,'rgba(0,0,0,0)');
+          ctx.fillStyle=g; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
+        });
+        requestAnimationFrame(frame);
+      }
+      frame();
+    }
+    // Wait for render then attach a canvas to each .tbody
+    function attachSmoke(){
+      document.querySelectorAll('.tbody').forEach(tb=>{
+        if(tb.querySelector('.smoke-cv')) return; // already done
+        const cv=document.createElement('canvas');
+        cv.className='smoke-cv';
+        cv.width=tb.offsetWidth||200; cv.height=tb.offsetHeight||300;
+        cv.style.cssText='position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:1;';
+        tb.style.position='relative';
+        tb.insertBefore(cv,tb.firstChild);
+        initSmoke(cv);
+      });
+    }
+    // tbody gets populated after Firebase loads — watch for it
+    setTimeout(attachSmoke,1500);
+    setTimeout(attachSmoke,3000); // retry in case of slow load
   })();
   <\/script>
   </body></html>`);
