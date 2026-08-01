@@ -248,7 +248,7 @@ table tr:hover td{background:#222;}
   <div class="header-right">
     <div class="sync-dot" id="sync-dot" title="Firebase sync status"></div>
     <button class="admin-btn" id="admin-btn" onclick="toggleAdmin()">👁 VIEW</button>
-    <div class="ver-badge">v6.1</div>
+    <div class="ver-badge">v6.3</div>
   </div>
 </header>
 
@@ -335,7 +335,7 @@ table tr:hover td{background:#222;}
     <div class="sched-block">
       <div class="sched-block-header">
         <h3>📅 Evening Schedule</h3>
-        <button class="btn btn-sm btn-purple" onclick="addSchedItem()" id="add-sched-btn">+ Add</button>
+        <button class="btn btn-sm" onclick="resetSchedule()" id="reset-sched-btn" style="background:#2a2a2a;color:#aaa;border:1px solid #444;margin-right:6px">↺ Reset Schedule</button><button class="btn btn-sm btn-purple" onclick="addSchedItem()" id="add-sched-btn">+ Add</button>
       </div>
       <div class="sched-items" id="sched-items"></div>
     </div>
@@ -474,7 +474,7 @@ function applyMode() {
   document.getElementById('admin-btn').classList.toggle('on', a);
   document.getElementById('mode-label').textContent = a ? 'Admin' : 'View';
   // Show/hide admin-only controls
-  ['add-form-wrap','csv-wrap','admin-only-btns','add-sched-btn','add-game-btn','add-award-wrap'].forEach(id => {
+  ['add-form-wrap','csv-wrap','admin-only-btns','add-sched-btn','reset-sched-btn','add-game-btn','add-award-wrap'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.style.display = a ? '' : 'none';
   });
@@ -1350,8 +1350,24 @@ function openSecondScreen(){
         return '<div class="gr"><span class="gtime">'+e(g.time)+'</span><span class="gteam right">'+e(g.home)+'</span><span class="gscore">'+sh+' – '+sa+'</span><span class="gteam">'+e(g.away)+comp+'</span></div>';
       }).join('')+'</div>';
 
+    // Merge Firebase schedule with defaults — fill gaps and re-sort
+    const defaultSched=[
+      {time:'5:00 PM',desc:'Opening Ceremony — All three teams on ice'},
+      {time:'5:01 PM',desc:'Welcome & Opening Remarks'},
+      {time:'5:03 PM',desc:'MK Memorial Banner Raising'},
+      {time:'5:06 PM',desc:'Remarks from Family'},
+      {time:'5:09 PM',desc:'National Anthem'},
+      {time:'5:15 PM',desc:'Game 1 — Black vs White'},
+      {time:'5:50 PM',desc:'Game 2 — Purple vs White'},
+      {time:'6:09 PM',desc:'🧊 Ice Cut (10 min)'},
+      {time:'6:19 PM',desc:'Game 2 — 2nd Half resumes'},
+      {time:'6:34 PM',desc:'Game 3 — Black vs Purple'},
+      {time:'7:09 PM',desc:'Awards & celebration at the bar'},
+    ];
+    const firebaseSched = s.schedule && s.schedule.length >= 8 ? s.schedule : defaultSched;
+    const schedToShow = firebaseSched;
     const schedHtml2='<div class="rbox"><div class="sec-lbl">Schedule of Events</div>'
-      +[...s.schedule].sort((a,b)=>{
+      +[...schedToShow].sort((a,b)=>{
         function toMins(t){const m=t.match(/(\d+):(\d+)/);if(!m)return 9999;let h=parseInt(m[1]),mn=parseInt(m[2]);if(t.includes('AM')){}else{if(h<12)h+=12;}return h*60+mn;}
         return toMins(a.time)-toMins(b.time);
       }).map(x=>'<div class="sr"><span class="stime">'+e(x.time)+'</span><span class="sdesc">'+e(x.desc)+'</span></div>').join('')+'</div>';
