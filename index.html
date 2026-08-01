@@ -248,7 +248,7 @@ table tr:hover td{background:#222;}
   <div class="header-right">
     <div class="sync-dot" id="sync-dot" title="Firebase sync status"></div>
     <button class="admin-btn" id="admin-btn" onclick="toggleAdmin()">👁 VIEW</button>
-    <div class="ver-badge">v6.0</div>
+    <div class="ver-badge">v6.1</div>
   </div>
 </header>
 
@@ -514,10 +514,10 @@ function defaultScoresheets() {
 function defaultSchedule() {
   return [
     { time: '5:00 PM',  desc: 'Opening Ceremony — All three teams on ice' },
-    { time: '5:00',     desc: 'Welcome & Opening Remarks' },
-    { time: '5:03',     desc: 'MK Memorial Banner Raising' },
-    { time: '5:06',     desc: 'Remarks from Family' },
-    { time: '5:09',     desc: 'National Anthem' },
+    { time: '5:01 PM',  desc: 'Welcome & Opening Remarks' },
+    { time: '5:03 PM',  desc: 'MK Memorial Banner Raising' },
+    { time: '5:06 PM',  desc: 'Remarks from Family' },
+    { time: '5:09 PM',  desc: 'National Anthem' },
     { time: '5:15 PM',  desc: 'Game 1 — Black vs White' },
     { time: '5:50 PM',  desc: 'Game 2 — Purple vs White' },
     { time: '6:09 PM',  desc: '🧊 Ice Cut (10 min)' },
@@ -1352,7 +1352,7 @@ function openSecondScreen(){
 
     const schedHtml2='<div class="rbox"><div class="sec-lbl">Schedule of Events</div>'
       +[...s.schedule].sort((a,b)=>{
-        function toMins(t){const m=t.match(/(\d+):(\d+)/);if(!m)return 9999;let h=parseInt(m[1]),mn=parseInt(m[2]);if(h<12&&(t.includes('PM')||(!t.includes('AM')&&h<8)))h+=12;return h*60+mn;}
+        function toMins(t){const m=t.match(/(\d+):(\d+)/);if(!m)return 9999;let h=parseInt(m[1]),mn=parseInt(m[2]);if(t.includes('AM')){}else{if(h<12)h+=12;}return h*60+mn;}
         return toMins(a.time)-toMins(b.time);
       }).map(x=>'<div class="sr"><span class="stime">'+e(x.time)+'</span><span class="sdesc">'+e(x.desc)+'</span></div>').join('')+'</div>';
     document.getElementById('p1-main').innerHTML = rosHtml
