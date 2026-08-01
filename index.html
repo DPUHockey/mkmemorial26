@@ -248,7 +248,7 @@ table tr:hover td{background:#222;}
   <div class="header-right">
     <div class="sync-dot" id="sync-dot" title="Firebase sync status"></div>
     <button class="admin-btn" id="admin-btn" onclick="toggleAdmin()">👁 VIEW</button>
-    <div class="ver-badge">v6.5</div>
+    <div class="ver-badge">v6.8</div>
   </div>
 </header>
 
@@ -854,6 +854,7 @@ function onDrop(e,targetZone){
   else{player=state.teams[dragSource].find(p=>p.id===dragId);if(!player)return;state.teams[dragSource]=state.teams[dragSource].filter(p=>p.id!==dragId);}
   if(targetZone==='holding'){if(!state.holding.find(p=>p.id===player.id))state.holding.push(player);}
   else{if(!state.teams[targetZone].find(p=>p.id===player.id))state.teams[targetZone].push(player);}
+  renderHolding(); renderTeams();
   pushState();
 }
 
@@ -881,6 +882,7 @@ function mobileAssign(target){
   else{player=state.teams[assignSrc]?.find(p=>p.id===assignId);if(!player)return;state.teams[assignSrc]=state.teams[assignSrc].filter(p=>p.id!==assignId);}
   if(target==='holding'){if(!state.holding.find(p=>p.id===player.id))state.holding.push(player);}
   else{if(!state.teams[target].find(p=>p.id===player.id))state.teams[target].push(player);}
+  renderHolding(); renderTeams();
   pushState();assignId=null;assignSrc=null;
 }
 
@@ -937,6 +939,7 @@ function onTE(e){
     if(player){
       if(target==='holding'){if(!state.holding.find(p=>p.id===player.id))state.holding.push(player);}
       else{if(!state.teams[target].find(p=>p.id===player.id))state.teams[target].push(player);}
+      renderHolding(); renderTeams();
       pushState();
     }
   }
