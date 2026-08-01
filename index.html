@@ -248,7 +248,7 @@ table tr:hover td{background:#222;}
   <div class="header-right">
     <div class="sync-dot" id="sync-dot" title="Firebase sync status"></div>
     <button class="admin-btn" id="admin-btn" onclick="toggleAdmin()">👁 VIEW</button>
-    <div class="ver-badge">v7.3</div>
+    <div class="ver-badge">v7.4</div>
   </div>
 </header>
 
@@ -308,7 +308,7 @@ table tr:hover td{background:#222;}
       </div>
     </div>
     <div>
-      <div class="section-title">Team Rosters</div>
+      <div class="section-title" style="display:flex;align-items:center;justify-content:space-between">Team Rosters<button class="btn btn-sm" style="background:#333;color:#ccc;font-size:11px" onclick="printRosters()">🖨️ Print Rosters</button></div>
       <p class="tip" id="roster-tip">Desktop: drag players into teams. Mobile: tap <strong style="color:var(--purple-light)">Assign</strong>. Currently in <span id="mode-label">View</span> mode.</p>
       <div class="teams-grid">
         <div class="team-panel white-team panel">
@@ -397,7 +397,6 @@ table tr:hover td{background:#222;}
     <button class="btn btn-yellow" onclick="openSecondScreen()">📺 Open on 2nd Screen</button>
     <button class="btn btn-purple" onclick="renderOutput()">🔄 Refresh Preview</button>
     <button class="btn" style="background:#333;color:#ccc" onclick="printOutput()">🖨️ Print</button>
-        <button class="btn" style="background:#333;color:#ccc" onclick="printRosters()">🖨️ Print Rosters</button>
   </div>
   <div class="output-frame" id="output-frame">
     <div style="text-align:center;color:#555;padding:40px">Click Refresh Preview to generate output</div>
