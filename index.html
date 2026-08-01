@@ -248,7 +248,7 @@ table tr:hover td{background:#222;}
   <div class="header-right">
     <div class="sync-dot" id="sync-dot" title="Firebase sync status"></div>
     <button class="admin-btn" id="admin-btn" onclick="toggleAdmin()">👁 VIEW</button>
-    <div class="ver-badge">v5.6</div>
+    <div class="ver-badge">v5.7</div>
   </div>
 </header>
 
@@ -1207,7 +1207,7 @@ function openSecondScreen(){
       .t-black .tbody{background:rgba(30,15,55,0.55);border-left:3px solid #6b3fa0;border-right:3px solid #6b3fa0;border-bottom:3px solid #6b3fa0;}
       .pr{display:flex;align-items:center;padding:1px 0;border-bottom:1px solid rgba(255,255,255,0.06);white-space:nowrap;position:relative;z-index:1;}
       .pr:last-child{border-bottom:none;}
-      .pname{font-weight:600;color:#fff;flex:1;overflow:hidden;text-overflow:ellipsis;}
+      .pname{font-weight:600;color:#fff;flex:1;overflow:hidden;text-overflow:ellipsis;font-size:10px;}
       .t-white .pname{color:#ccc;text-shadow:0 1px 2px rgba(0,0,0,0.8);}
       .ppos{color:#aaa;flex-shrink:0;margin-left:8px;font-weight:600;}
       .t-yellow .ppos{color:#888;}
@@ -1235,6 +1235,8 @@ function openSecondScreen(){
 
       /* ── SHARED SPONSOR BAR ── */
       .sponsor-bar{overflow:hidden;width:100%;background:rgba(255,255,255,0.04);border-top:1px solid #222;display:flex;align-items:center;flex-shrink:0;height:84px;}
+      #p2 .sponsor-bar{height:210px;}
+      #p2 .sponsor-bar img{height:195px!important;max-width:600px!important;}
       #strack1,#strack2,#strack3{display:flex;align-items:center;gap:36px;will-change:transform;padding:0 18px;}
 
       /* ── PAGE 2: SCHEDULE + AWARDS ── */
@@ -1786,25 +1788,41 @@ function renderActiveScoresheetGame() {
       ${isAdmin ? `<button onclick="completeGame(${activeGame})" style="margin-left:16px;font-family:'Oswald',sans-serif;font-size:12px;font-weight:700;padding:6px 14px;border-radius:6px;border:none;cursor:pointer;letter-spacing:1px;${ss.completed?'background:#4caf50;color:#fff':'background:#2a2a2a;color:#888;border:1px solid #444'}">${ss.completed?'✓ FINAL':'Mark Final'}</button>` : (ss.completed?'<span style="margin-left:16px;color:#4caf50;font-family:\'Oswald\',sans-serif;font-size:13px;font-weight:700">✓ FINAL</span>':'')}
     </div>
 
-    <!-- Goals -->
-    <div class="sh-section">
-      <div class="sh-header">
-        <h3>⚡ GOALS</h3>
-        <span style="font-family:'Oswald',sans-serif;font-size:13px;color:var(--yellow)">${homeScore+awayScore} total</span>
-      </div>
-      ${adminGoalForm}
-      <div class="sh-list">${goalsLog}</div>
-    </div>
 
-    <!-- Penalties -->
-    <div class="sh-section">
-      <div class="sh-header">
-        <h3>🚫 PENALTIES</h3>
-        <span style="font-family:'Oswald',sans-serif;font-size:13px;color:#e88">${ss.penalties.length} calls</span>
+    ${isAdmin ? `
+    <!-- Score Buttons -->
+    <div style="display:flex;gap:24px;justify-content:center;margin:24px 0;flex-wrap:wrap;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+        <div style="font-family:'Oswald',sans-serif;font-size:16px;font-weight:700;color:${homeColor};letter-spacing:1px">${home}</div>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <button onclick="adjustScore(${activeGame},'home',-1)" style="width:52px;height:52px;font-size:26px;font-weight:700;border-radius:8px;border:none;cursor:pointer;background:#2a2a2a;color:#e88;line-height:1">−</button>
+          <span style="font-family:'Oswald',sans-serif;font-size:48px;font-weight:700;color:#fff;min-width:60px;text-align:center">${homeScore}</span>
+          <button onclick="adjustScore(${activeGame},'home',1)" style="width:52px;height:52px;font-size:26px;font-weight:700;border-radius:8px;border:none;cursor:pointer;background:#6b3fa0;color:#fff;line-height:1">+</button>
+        </div>
       </div>
-      ${adminPenForm}
-      <div class="sh-list">${penLog}</div>
-    </div>`;
+      <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+        <div style="font-family:'Oswald',sans-serif;font-size:16px;font-weight:700;color:${awayColor};letter-spacing:1px">${away}</div>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <button onclick="adjustScore(${activeGame},'away',-1)" style="width:52px;height:52px;font-size:26px;font-weight:700;border-radius:8px;border:none;cursor:pointer;background:#2a2a2a;color:#e88;line-height:1">−</button>
+          <span style="font-family:'Oswald',sans-serif;font-size:48px;font-weight:700;color:#fff;min-width:60px;text-align:center">${awayScore}</span>
+          <button onclick="adjustScore(${activeGame},'away',1)" style="width:52px;height:52px;font-size:26px;font-weight:700;border-radius:8px;border:none;cursor:pointer;background:#6b3fa0;color:#fff;line-height:1">+</button>
+        </div>
+      </div>
+    </div>` : ''}
+  `;
+}
+
+function adjustScore(gi, side, delta) {
+  if (!isAdmin) return;
+  const g = state.games[gi];
+  const key = side === 'home' ? 'scoreHome' : 'scoreAway';
+  let cur = parseInt(g[key]) || 0;
+  cur = Math.max(0, cur + delta);
+  state.games[gi][key] = String(cur);
+  // Also keep scoresheet goals array in sync (clear it, use direct score)
+  // We'll just track score directly without goals array
+  state.scoresheets[gi].goals = []; // clear goal-by-goal tracking since we don't need it
+  pushState();
 }
 
 function refreshGoalPlayers(gi) {
