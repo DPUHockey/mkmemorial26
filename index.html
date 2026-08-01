@@ -248,7 +248,7 @@ table tr:hover td{background:#222;}
   <div class="header-right">
     <div class="sync-dot" id="sync-dot" title="Firebase sync status"></div>
     <button class="admin-btn" id="admin-btn" onclick="toggleAdmin()">👁 VIEW</button>
-    <div class="ver-badge">v5.7</div>
+    <div class="ver-badge">v5.8</div>
   </div>
 </header>
 
@@ -1237,28 +1237,7 @@ function openSecondScreen(){
       .sponsor-bar{overflow:hidden;width:100%;background:rgba(255,255,255,0.04);border-top:1px solid #222;display:flex;align-items:center;flex-shrink:0;height:84px;}
       #p2 .sponsor-bar{height:210px;}
       #p2 .sponsor-bar img{height:195px!important;max-width:600px!important;}
-      #strack1,#strack2,#strack3{display:flex;align-items:center;gap:36px;will-change:transform;padding:0 18px;}
-
-      /* ── PAGE 2: SCHEDULE + AWARDS ── */
-      #p2{padding:8px 12px 6px;gap:10px;}
-      .p2-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;flex:1;min-height:0;overflow:hidden;}
-      .bbox{background:rgba(10,10,10,0.60);border-radius:6px;padding:10px 14px;overflow:auto;}
-      .sr{display:flex;gap:10px;padding:4px 0;border-bottom:1px solid #1a1a1a;align-items:baseline;}
-      .sr:last-child{border-bottom:none;}
-      .stime{color:#F5C800;font-weight:600;min-width:90px;flex-shrink:0;font-size:clamp(12px,1.1vw,16px);}
-      .sdesc{color:#ddd;font-size:clamp(12px,1.1vw,16px);}
-      .ar{display:flex;gap:10px;padding:5px 0;border-bottom:1px solid #1a1a1a;align-items:center;}
-      .ar:last-child{border-bottom:none;}
-      .aicon{font-size:clamp(18px,2vw,28px);flex-shrink:0;}
-      .aname{color:#F5C800;font-weight:700;min-width:160px;flex-shrink:0;font-size:clamp(11px,1.1vw,16px);}
-      .awinner{color:#fff;font-size:clamp(12px,1.1vw,16px);}
-      .anote{color:#888;font-size:clamp(10px,.9vw,13px);margin-top:2px;}
-
-      /* ── PAGE 3: RAFFLE ── */
-      #p3{padding:8px 12px 6px;gap:10px;align-items:center;justify-content:center;}
-      .raffle-content{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;}
-      .raffle-title{font-size:clamp(28px,4vw,56px);font-weight:700;color:#9b59d0;letter-spacing:4px;text-align:center;}
-      .raffle-sub{font-size:clamp(14px,1.8vw,24px);color:#ccc;letter-spacing:2px;text-align:center;}
+      #strack1{display:flex;align-items:center;gap:36px;will-change:transform;padding:0 18px;}
 
       /* ── FOOTER ── */
       .footer{text-align:center;font-size:clamp(9px,0.8vw,12px);color:#333;letter-spacing:2px;flex-shrink:0;padding:3px 0;}
@@ -1269,8 +1248,6 @@ function openSecondScreen(){
   </head><body>
   <div id="page-dots">
     <div class="pdot on" onclick="goPage(0)"></div>
-    <div class="pdot" onclick="goPage(1)"></div>
-    <div class="pdot" onclick="goPage(2)"></div>
   </div>
 
   <!-- PAGE 1: Rosters, Standings, Scores -->
@@ -1284,31 +1261,6 @@ function openSecondScreen(){
     <div class="sponsor-bar"><div id="strack1"><img src="images/img_02.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_03.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_04.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_05.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_06.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_07.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_08.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_09.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_10.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_11.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_12.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_13.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_14.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_02.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_03.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_04.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_05.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_06.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_07.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_08.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_09.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_10.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_11.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_12.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_13.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_14.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"></div></div>
   </div>
 
-  <!-- PAGE 2: Schedule + Awards -->
-  <div class="page" id="p2">
-    <div class="hd">
-      <div class="hd-title">★ MITCH KURTZ MEMORIAL TOURNAMENT ★</div>
-      <div class="hd-sub">Evening Schedule &nbsp;·&nbsp; August 1, 2026 &nbsp;·&nbsp; Inwood Ice Arena, Joliet IL</div>
-    </div>
-    <div class="p2-grid" id="p2-grid">Loading…</div>
-    <div class="footer">HONORING THE PAST &nbsp;·&nbsp; SUPPORTING TODAY &nbsp;·&nbsp; HOPE FOR TOMORROW</div>
-    <div class="sponsor-bar"><div id="strack2"><img src="images/img_02.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_03.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_04.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_05.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_06.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_07.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_08.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_09.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_10.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_11.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_12.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_13.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_14.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_02.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_03.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_04.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_05.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_06.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_07.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_08.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_09.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_10.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_11.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_12.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_13.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_14.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"></div></div>
-  </div>
-
-  <!-- PAGE 3: Raffle -->
-  <div class="page" id="p3">
-    <div class="hd">
-      <div class="hd-title">★ MITCH KURTZ MEMORIAL TOURNAMENT ★</div>
-      <div class="hd-sub">2nd Annual Benefit Game &nbsp;·&nbsp; Sarcoma Foundation of America</div>
-    </div>
-    <div class="raffle-content" id="p3-content">
-      <div class="raffle-title">🎟️ RAFFLE</div>
-      <div class="raffle-sub">Items &amp; prizes to be announced</div>
-      <div class="raffle-sub" style="color:#6b3fa0;font-size:clamp(12px,1.4vw,20px);">All proceeds benefit the Sarcoma Foundation of America</div>
-    </div>
-    <div class="footer">HONORING THE PAST &nbsp;·&nbsp; SUPPORTING TODAY &nbsp;·&nbsp; HOPE FOR TOMORROW</div>
-    <div class="sponsor-bar"><div id="strack3"><img src="images/img_02.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_03.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_04.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_05.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_06.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_07.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_08.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_09.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_10.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_11.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_12.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_13.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_14.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_02.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_03.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_04.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_05.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_06.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_07.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_08.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_09.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_10.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_11.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_12.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_13.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_14.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"></div></div>
-  </div>
 
   <script>
   const cfg=${JSON.stringify(firebaseConfig)};
@@ -1393,31 +1345,16 @@ function openSecondScreen(){
         return '<div class="gr"><span class="gtime">'+e(g.time)+'</span><span class="gteam right">'+e(g.home)+'</span><span class="gscore">'+sh+' – '+sa+'</span><span class="gteam">'+e(g.away)+comp+'</span></div>';
       }).join('')+'</div>';
 
-    document.getElementById('p1-main').innerHTML = rosHtml
-      + '<div class="rpanel"><div class="rcol">'+standHtml+scoresHtml+'</div></div>';
-
-    // ── PAGE 2: Schedule + Awards ──
-    const schedHtml='<div class="bbox"><div class="sec-lbl">Schedule of Events</div>'
+    const schedHtml2='<div class="rbox"><div class="sec-lbl">Schedule of Events</div>'
       +s.schedule.map(x=>'<div class="sr"><span class="stime">'+e(x.time)+'</span><span class="sdesc">'+e(x.desc)+'</span></div>').join('')+'</div>';
-
-    const awds=s.awards;
-    const awdHtml='<div class="bbox"><div class="sec-lbl">Awards &amp; Recognition</div>'
-      +(awds.length===0
-        ? '<div style="color:#444;font-size:13px;padding:10px 0">To be announced</div>'
-        : awds.map(a=>'<div class="ar"><span class="aicon">'+e(a.icon||'🏆')+'</span><div><div style="display:flex;align-items:center;gap:10px"><span class="aname">'+e(a.name)+'</span>'+(a.winner?'<span class="awinner">'+e(a.winner)+'</span>':'')+'</div>'+(a.note?'<div class="anote">'+e(a.note)+'</div>':'')+'</div></div>').join(''))
-      +'</div>';
-
-    document.getElementById('p2-grid').innerHTML = schedHtml + awdHtml;
-
-    // size roster rows
+    document.getElementById('p1-main').innerHTML = rosHtml
+      + '<div class="rpanel"><div class="rcol">'+standHtml+scoresHtml+'</div><div class="rcol">'+schedHtml2+'</div></div>';
     sizeRows();
   }
 
   function sizeRows(){
     requestAnimationFrame(()=>{
-      // Compute font size from the tallest team roster
-      let fs = 18;
-      let maxRows = 1;
+      let fs = 18, maxRows = 1;
       document.querySelectorAll('.tbody').forEach(tb => {
         const rows = tb.querySelectorAll('.pr');
         if(rows.length > maxRows) maxRows = rows.length;
@@ -1428,21 +1365,18 @@ function openSecondScreen(){
         const perRow = Math.floor(avail / (maxRows + 1));
         fs = Math.min(Math.max(Math.floor(perRow * 0.65), 22), 58);
       }
-      // Apply same font size to ALL tbodies so they match
       document.querySelectorAll('.tbody').forEach(tb => { tb.style.fontSize = fs + 'px'; });
-      // Let names expand naturally (flex:1) — no fixed width
       document.querySelectorAll('.pname,.phdr-name').forEach(el => {
-        el.style.width = '';
-        el.style.flex = '1';
+        el.style.width = ''; el.style.flex = '1';
       });
     });
   }
 
-  // ── PAGE ROTATION ──
+  const pages = ['p1'];
+  const dots  = document.querySelectorAll('.pdot');
   let curPage = 0;
-  const pages = ['p1','p2','p3'];
-  const dots = document.querySelectorAll('.pdot');
-  let rotateTimer = setInterval(()=>{ goPage((curPage+1)%pages.length); }, 15000);
+  let rotateTimer;
+  sizeRows();
 
   function goPage(idx){
     clearInterval(rotateTimer);
@@ -1451,13 +1385,12 @@ function openSecondScreen(){
     curPage = idx;
     document.getElementById(pages[curPage]).classList.add('active');
     dots[curPage].classList.add('on');
-    if(curPage===0) sizeRows();
-    rotateTimer = setInterval(()=>{ goPage((curPage+1)%pages.length); }, 15000);
+    sizeRows();
   }
 
   // ── SPONSOR TICKER (all 3 bars) ──
   (function(){
-    ['strack1','strack2','strack3'].forEach(id=>{
+    ['strack1'].forEach(id=>{
       const track=document.getElementById(id);
       if(!track) return;
       let x=0;
@@ -1615,18 +1548,9 @@ function renderActiveScoresheetGame() {
   const ss  = state.scoresheets[activeGame];
   const home = g.home, away = g.away;
 
-  // Compute live score from goals
-  let homeScore = 0, awayScore = 0;
-  ss.goals.forEach(goal => {
-    if (goal.team === home) homeScore++;
-    if (goal.team === away) awayScore++;
-  });
-
-  // Only sync score back to games if goals have been logged
-  if (ss.goals.length > 0) {
-    state.games[activeGame].scoreHome = String(homeScore);
-    state.games[activeGame].scoreAway = String(awayScore);
-  }
+  // Read score directly from games state
+  let homeScore = parseInt(state.games[activeGame].scoreHome) || 0;
+  let awayScore = parseInt(state.games[activeGame].scoreAway) || 0;
 
   const homeColor = TEAM_COLORS[home] || '#888';
   const awayColor = TEAM_COLORS[away] || '#888';
