@@ -248,7 +248,7 @@ table tr:hover td{background:#222;}
   <div class="header-right">
     <div class="sync-dot" id="sync-dot" title="Firebase sync status"></div>
     <button class="admin-btn" id="admin-btn" onclick="toggleAdmin()">👁 VIEW</button>
-    <div class="ver-badge">v6.9</div>
+    <div class="ver-badge">v7.1</div>
   </div>
 </header>
 
@@ -1382,7 +1382,7 @@ function openSecondScreen(){
       if(firstTbody){
         const avail = firstTbody.clientHeight;
         const perRow = Math.floor(avail / (maxRows + 1));
-        fs = Math.min(Math.max(Math.floor(perRow * 0.80), 26), 80);
+        fs = Math.max(10, Math.floor(perRow * 0.60));
       }
       document.querySelectorAll('.tbody').forEach(tb => { tb.style.fontSize = fs + 'px'; });
       document.querySelectorAll('.pname,.phdr-name').forEach(el => {
