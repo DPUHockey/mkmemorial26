@@ -248,7 +248,7 @@ table tr:hover td{background:#222;}
   <div class="header-right">
     <div class="sync-dot" id="sync-dot" title="Firebase sync status"></div>
     <button class="admin-btn" id="admin-btn" onclick="toggleAdmin()">👁 VIEW</button>
-    <div class="ver-badge">v7.1</div>
+    <div class="ver-badge">v7.2</div>
   </div>
 </header>
 
@@ -608,9 +608,9 @@ function pushState() {
     games:    arrToObj(state.games,    true),
     awards:   arrToObj(state.awards,   true),
     scoresheets: {
-      i0: { goals: arrToObj(state.scoresheets[0].goals, true), penalties: arrToObj(state.scoresheets[0].penalties, true) },
-      i1: { goals: arrToObj(state.scoresheets[1].goals, true), penalties: arrToObj(state.scoresheets[1].penalties, true) },
-      i2: { goals: arrToObj(state.scoresheets[2].goals, true), penalties: arrToObj(state.scoresheets[2].penalties, true) },
+      i0: { goals: arrToObj(state.scoresheets[0].goals, true), penalties: arrToObj(state.scoresheets[0].penalties, true), completed: state.scoresheets[0].completed },
+      i1: { goals: arrToObj(state.scoresheets[1].goals, true), penalties: arrToObj(state.scoresheets[1].penalties, true), completed: state.scoresheets[1].completed },
+      i2: { goals: arrToObj(state.scoresheets[2].goals, true), penalties: arrToObj(state.scoresheets[2].penalties, true), completed: state.scoresheets[2].completed },
     }
   };
   _ignoreNext = true;
@@ -854,6 +854,7 @@ function onDrop(e,targetZone){
   else{player=state.teams[dragSource].find(p=>p.id===dragId);if(!player)return;state.teams[dragSource]=state.teams[dragSource].filter(p=>p.id!==dragId);}
   if(targetZone==='holding'){if(!state.holding.find(p=>p.id===player.id))state.holding.push(player);}
   else{if(!state.teams[targetZone].find(p=>p.id===player.id))state.teams[targetZone].push(player);}
+  renderHolding(); renderTeams();
   pushState();
 }
 
@@ -881,6 +882,7 @@ function mobileAssign(target){
   else{player=state.teams[assignSrc]?.find(p=>p.id===assignId);if(!player)return;state.teams[assignSrc]=state.teams[assignSrc].filter(p=>p.id!==assignId);}
   if(target==='holding'){if(!state.holding.find(p=>p.id===player.id))state.holding.push(player);}
   else{if(!state.teams[target].find(p=>p.id===player.id))state.teams[target].push(player);}
+  renderHolding(); renderTeams();
   pushState();assignId=null;assignSrc=null;
 }
 
@@ -937,6 +939,7 @@ function onTE(e){
     if(player){
       if(target==='holding'){if(!state.holding.find(p=>p.id===player.id))state.holding.push(player);}
       else{if(!state.teams[target].find(p=>p.id===player.id))state.teams[target].push(player);}
+      renderHolding(); renderTeams();
       pushState();
     }
   }
@@ -994,6 +997,8 @@ function resetScores() {
   if (!confirm('Clear all game scores back to blank? This also resets scoresheets.')) return;
   state.games.forEach(g => { g.scoreHome = ''; g.scoreAway = ''; });
   state.scoresheets = defaultScoresheets();
+  renderStandings();
+  renderScoresheet();
   pushState();
 }
 
@@ -1061,7 +1066,7 @@ function renderAwards(){
 }
 let awardDebounce;
 function updAward(i,k,v){state.awards[i][k]=v;clearTimeout(awardDebounce);awardDebounce=setTimeout(pushState,800);}
-function remAward(i){if(!isAdmin)return;state.awards.splice(i,1);pushState();}
+function remAward(i){if(!isAdmin)return;state.awards.splice(i,1);renderAwards();pushState();}
 function addAward(){if(!isAdmin)return;state.awards.push({icon:'🏅',name:'New Award',winner:'',note:''});pushState();}
 
 // ══════════════════════════════════════
