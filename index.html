@@ -248,7 +248,7 @@ table tr:hover td{background:#222;}
   <div class="header-right">
     <div class="sync-dot" id="sync-dot" title="Firebase sync status"></div>
     <button class="admin-btn" id="admin-btn" onclick="toggleAdmin()">👁 VIEW</button>
-    <div class="ver-badge">v5.9</div>
+    <div class="ver-badge">v6.0</div>
   </div>
 </header>
 
@@ -966,6 +966,7 @@ function renderSchedule(){
 let schedDebounce;
 function updSched(i,k,v){state.schedule[i][k]=v;clearTimeout(schedDebounce);schedDebounce=setTimeout(pushState,800);}
 function addSchedItem(){if(!isAdmin)return;state.schedule.push({time:'',desc:''});pushState();}
+function resetSchedule(){if(!isAdmin)return;if(!confirm('Reset schedule to defaults?'))return;state.schedule=defaultSchedule();pushState();renderSchedule();}
 function remSched(i){if(!isAdmin)return;state.schedule.splice(i,1);pushState();}
 let gameDebounce;
 function updGame(i,k,v){state.games[i][k]=v;clearTimeout(gameDebounce);gameDebounce=setTimeout(pushState,800);}
@@ -1207,7 +1208,7 @@ function openSecondScreen(){
       .t-black .tbody{background:rgba(30,15,55,0.55);border-left:3px solid #6b3fa0;border-right:3px solid #6b3fa0;border-bottom:3px solid #6b3fa0;}
       .pr{display:flex;align-items:center;padding:1px 0;border-bottom:1px solid rgba(255,255,255,0.06);white-space:nowrap;position:relative;z-index:1;}
       .pr:last-child{border-bottom:none;}
-      .pname{font-weight:600;color:#fff;flex:1;overflow:hidden;text-overflow:ellipsis;font-size:10px;}
+      .pname{font-weight:600;color:#fff;flex:1;overflow:hidden;text-overflow:ellipsis;}
       .t-white .pname{color:#ccc;text-shadow:0 1px 2px rgba(0,0,0,0.8);}
       .ppos{color:#aaa;flex-shrink:0;margin-left:8px;font-weight:600;}
       .t-yellow .ppos{color:#888;}
@@ -1236,6 +1237,12 @@ function openSecondScreen(){
       /* ── SHARED SPONSOR BAR ── */
       .sponsor-bar{overflow:hidden;width:100%;background:rgba(255,255,255,0.04);border-top:1px solid #222;display:flex;align-items:center;flex-shrink:0;height:210px;}
       #strack1{display:flex;align-items:center;gap:36px;will-change:transform;padding:0 18px;}
+
+      /* ── SCHEDULE DISPLAY ── */
+      .sr{display:flex;gap:14px;padding:6px 0;border-bottom:1px solid #1a1a1a;align-items:baseline;}
+      .sr:last-child{border-bottom:none;}
+      .stime{color:#F5C800;font-weight:700;min-width:80px;flex-shrink:0;font-size:clamp(16px,1.6vw,26px);}
+      .sdesc{color:#ddd;font-size:clamp(15px,1.5vw,24px);}
 
       /* ── FOOTER ── */
       .footer{text-align:center;font-size:clamp(9px,0.8vw,12px);color:#333;letter-spacing:2px;flex-shrink:0;padding:3px 0;}
@@ -1344,7 +1351,10 @@ function openSecondScreen(){
       }).join('')+'</div>';
 
     const schedHtml2='<div class="rbox"><div class="sec-lbl">Schedule of Events</div>'
-      +s.schedule.map(x=>'<div class="sr"><span class="stime">'+e(x.time)+'</span><span class="sdesc">'+e(x.desc)+'</span></div>').join('')+'</div>';
+      +[...s.schedule].sort((a,b)=>{
+        function toMins(t){const m=t.match(/(\d+):(\d+)/);if(!m)return 9999;let h=parseInt(m[1]),mn=parseInt(m[2]);if(h<12&&(t.includes('PM')||(!t.includes('AM')&&h<8)))h+=12;return h*60+mn;}
+        return toMins(a.time)-toMins(b.time);
+      }).map(x=>'<div class="sr"><span class="stime">'+e(x.time)+'</span><span class="sdesc">'+e(x.desc)+'</span></div>').join('')+'</div>';
     document.getElementById('p1-main').innerHTML = rosHtml
       + '<div class="rpanel"><div class="rcol">'+standHtml+scoresHtml+'</div><div class="rcol">'+schedHtml2+'</div></div>';
     sizeRows();
@@ -1361,7 +1371,7 @@ function openSecondScreen(){
       if(firstTbody){
         const avail = firstTbody.clientHeight;
         const perRow = Math.floor(avail / (maxRows + 1));
-        fs = Math.min(Math.max(Math.floor(perRow * 0.72), 24), 72);
+        fs = Math.min(Math.max(Math.floor(perRow * 0.80), 26), 80);
       }
       document.querySelectorAll('.tbody').forEach(tb => { tb.style.fontSize = fs + 'px'; });
       document.querySelectorAll('.pname,.phdr-name').forEach(el => {
@@ -1707,7 +1717,7 @@ function renderActiveScoresheetGame() {
       <div class="score-sep">–</div>
       <div class="score-num">${awayScore}</div>
       <div class="score-team away" style="color:${awayColor}">${away}</div>
-      ${isAdmin ? `<button onclick="completeGame(${activeGame})" style="margin-left:16px;font-family:'Oswald',sans-serif;font-size:12px;font-weight:700;padding:6px 14px;border-radius:6px;border:none;cursor:pointer;letter-spacing:1px;${ss.completed?'background:#4caf50;color:#fff':'background:#2a2a2a;color:#888;border:1px solid #444'}">${ss.completed?'✓ FINAL':'Mark Final'}</button>` : (ss.completed?'<span style="margin-left:16px;color:#4caf50;font-family:\'Oswald\',sans-serif;font-size:13px;font-weight:700">✓ FINAL</span>':'')}
+      ${isAdmin ? `<button onclick="completeGame(${activeGame})" style="margin-left:16px;font-family:'Oswald',sans-serif;font-size:12px;font-weight:700;padding:6px 14px;border-radius:6px;border:none;cursor:pointer;letter-spacing:1px;${ss.completed?'background:#4caf50;color:#fff':'background:#2a2a2a;color:#888;border:1px solid #444'}">${ss.completed?'✓ FINAL — tap to undo':'Mark Final'}</button>` : (ss.completed?'<span style="margin-left:16px;color:#4caf50;font-family:\'Oswald\',sans-serif;font-size:13px;font-weight:700">✓ FINAL</span>':'')}
     </div>
 
 
