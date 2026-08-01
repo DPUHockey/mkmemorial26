@@ -248,7 +248,7 @@ table tr:hover td{background:#222;}
   <div class="header-right">
     <div class="sync-dot" id="sync-dot" title="Firebase sync status"></div>
     <button class="admin-btn" id="admin-btn" onclick="toggleAdmin()">👁 VIEW</button>
-    <div class="ver-badge">v5.8</div>
+    <div class="ver-badge">v5.9</div>
   </div>
 </header>
 
@@ -513,17 +513,17 @@ function defaultScoresheets() {
 
 function defaultSchedule() {
   return [
-    { time: '5:00 PM',      desc: 'Opening Ceremony — All three teams on ice' },
-    { time: '5:00–5:03',    desc: 'Welcome & Opening Remarks' },
-    { time: '5:03–5:06',    desc: 'Mitch Kurtz Memorial Banner Raising' },
-    { time: '5:06–5:09',    desc: 'Remarks from Family' },
-    { time: '5:09–5:12',    desc: 'National Anthem' },
-    { time: '5:15 PM',      desc: 'Game 1 — Puck Drop (4 min warmup, 15 / 1 / 15)' },
-    { time: '5:50 PM',      desc: 'Game 2 — Puck Drop (4 min warmup, 15 min 1st half)' },
-    { time: '6:09 PM',      desc: '🧊 Ice Cut — 10 minutes (optional)' },
-    { time: '6:19 PM',      desc: 'Game 2 — 2nd Half resumes (15 min)' },
-    { time: '6:34 PM',      desc: 'Game 3 — Puck Drop (4 min warmup, 15 / 1 / 15)' },
-    { time: '7:09 PM',      desc: 'Tournament concludes — Awards & celebration at the bar' },
+    { time: '5:00 PM',  desc: 'Opening Ceremony — All three teams on ice' },
+    { time: '5:00',     desc: 'Welcome & Opening Remarks' },
+    { time: '5:03',     desc: 'MK Memorial Banner Raising' },
+    { time: '5:06',     desc: 'Remarks from Family' },
+    { time: '5:09',     desc: 'National Anthem' },
+    { time: '5:15 PM',  desc: 'Game 1 — Black vs White' },
+    { time: '5:50 PM',  desc: 'Game 2 — Purple vs White' },
+    { time: '6:09 PM',  desc: '🧊 Ice Cut (10 min)' },
+    { time: '6:19 PM',  desc: 'Game 2 — 2nd Half resumes' },
+    { time: '6:34 PM',  desc: 'Game 3 — Black vs Purple' },
+    { time: '7:09 PM',  desc: 'Awards & celebration at the bar' },
   ];
 }
 function defaultGames() {
@@ -1195,7 +1195,7 @@ function openSecondScreen(){
 
       /* ── PAGE 1: ROSTERS + STANDINGS ── */
       #p1{padding:8px 12px 6px;gap:6px;isolation:isolate;position:relative;}
-      .main{display:grid;grid-template-columns:1fr 1fr 1fr 3fr;gap:10px;min-height:0;align-items:stretch;flex:1;}
+      .main{display:grid;grid-template-columns:1fr 1fr 1fr 2fr;gap:8px;min-height:0;align-items:stretch;flex:1;}
       .tcol{display:flex;flex-direction:column;min-height:0;border-radius:6px;overflow:hidden;}
       .thdr{padding:6px 14px;font-size:clamp(16px,1.7vw,26px);font-weight:700;letter-spacing:2px;text-align:center;flex-shrink:0;}
       .t-white .thdr{background:#2a2a2a;color:#fff;border-top:1px solid #555;border-left:1px solid #555;border-right:1px solid #555;}
@@ -1234,9 +1234,7 @@ function openSecondScreen(){
       .gscore{background:#222;padding:5px 12px;border-radius:5px;font-size:clamp(20px,2.2vw,30px);font-weight:700;color:#fff;min-width:70px;text-align:center;flex-shrink:0;}
 
       /* ── SHARED SPONSOR BAR ── */
-      .sponsor-bar{overflow:hidden;width:100%;background:rgba(255,255,255,0.04);border-top:1px solid #222;display:flex;align-items:center;flex-shrink:0;height:84px;}
-      #p2 .sponsor-bar{height:210px;}
-      #p2 .sponsor-bar img{height:195px!important;max-width:600px!important;}
+      .sponsor-bar{overflow:hidden;width:100%;background:rgba(255,255,255,0.04);border-top:1px solid #222;display:flex;align-items:center;flex-shrink:0;height:210px;}
       #strack1{display:flex;align-items:center;gap:36px;will-change:transform;padding:0 18px;}
 
       /* ── FOOTER ── */
@@ -1258,7 +1256,7 @@ function openSecondScreen(){
     </div>
     <div class="main" id="p1-main">Loading…</div>
     <div class="footer">HONORING THE PAST &nbsp;·&nbsp; SUPPORTING TODAY &nbsp;·&nbsp; HOPE FOR TOMORROW</div>
-    <div class="sponsor-bar"><div id="strack1"><img src="images/img_02.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_03.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_04.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_05.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_06.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_07.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_08.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_09.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_10.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_11.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_12.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_13.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_14.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_02.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_03.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_04.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_05.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_06.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_07.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_08.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_09.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_10.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_11.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_12.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_13.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_14.png" alt="" style="height:65px;width:auto;max-width:200px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"></div></div>
+    <div class="sponsor-bar"><div id="strack1"><img src="images/img_02.png" alt="" style="height:195px;width:auto;max-width:500px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_03.png" alt="" style="height:195px;width:auto;max-width:500px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_04.png" alt="" style="height:195px;width:auto;max-width:500px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_05.png" alt="" style="height:195px;width:auto;max-width:500px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_06.png" alt="" style="height:195px;width:auto;max-width:500px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_07.png" alt="" style="height:195px;width:auto;max-width:500px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_08.png" alt="" style="height:195px;width:auto;max-width:500px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_09.png" alt="" style="height:195px;width:auto;max-width:500px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_10.png" alt="" style="height:195px;width:auto;max-width:500px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_11.png" alt="" style="height:195px;width:auto;max-width:500px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_12.png" alt="" style="height:195px;width:auto;max-width:500px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_13.png" alt="" style="height:195px;width:auto;max-width:500px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_14.png" alt="" style="height:195px;width:auto;max-width:500px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_02.png" alt="" style="height:195px;width:auto;max-width:500px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_03.png" alt="" style="height:195px;width:auto;max-width:500px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_04.png" alt="" style="height:195px;width:auto;max-width:500px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_05.png" alt="" style="height:195px;width:auto;max-width:500px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_06.png" alt="" style="height:195px;width:auto;max-width:500px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_07.png" alt="" style="height:195px;width:auto;max-width:500px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_08.png" alt="" style="height:195px;width:auto;max-width:500px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_09.png" alt="" style="height:195px;width:auto;max-width:500px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_10.png" alt="" style="height:195px;width:auto;max-width:500px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_11.png" alt="" style="height:195px;width:auto;max-width:500px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_12.png" alt="" style="height:195px;width:auto;max-width:500px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_13.png" alt="" style="height:195px;width:auto;max-width:500px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"><img src="images/img_14.png" alt="" style="height:195px;width:auto;max-width:500px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));"></div></div>
   </div>
 
 
@@ -1363,7 +1361,7 @@ function openSecondScreen(){
       if(firstTbody){
         const avail = firstTbody.clientHeight;
         const perRow = Math.floor(avail / (maxRows + 1));
-        fs = Math.min(Math.max(Math.floor(perRow * 0.65), 22), 58);
+        fs = Math.min(Math.max(Math.floor(perRow * 0.72), 24), 72);
       }
       document.querySelectorAll('.tbody').forEach(tb => { tb.style.fontSize = fs + 'px'; });
       document.querySelectorAll('.pname,.phdr-name').forEach(el => {
@@ -1743,9 +1741,7 @@ function adjustScore(gi, side, delta) {
   let cur = parseInt(g[key]) || 0;
   cur = Math.max(0, cur + delta);
   state.games[gi][key] = String(cur);
-  // Also keep scoresheet goals array in sync (clear it, use direct score)
-  // We'll just track score directly without goals array
-  state.scoresheets[gi].goals = []; // clear goal-by-goal tracking since we don't need it
+  renderActiveScoresheetGame(); // update UI immediately — don't wait for Firebase echo
   pushState();
 }
 
