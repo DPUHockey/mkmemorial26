@@ -248,7 +248,7 @@ table tr:hover td{background:#222;}
   <div class="header-right">
     <div class="sync-dot" id="sync-dot" title="Firebase sync status"></div>
     <button class="admin-btn" id="admin-btn" onclick="toggleAdmin()">👁 VIEW</button>
-    <div class="ver-badge">v6.8</div>
+    <div class="ver-badge">v6.9</div>
   </div>
 </header>
 
@@ -854,7 +854,6 @@ function onDrop(e,targetZone){
   else{player=state.teams[dragSource].find(p=>p.id===dragId);if(!player)return;state.teams[dragSource]=state.teams[dragSource].filter(p=>p.id!==dragId);}
   if(targetZone==='holding'){if(!state.holding.find(p=>p.id===player.id))state.holding.push(player);}
   else{if(!state.teams[targetZone].find(p=>p.id===player.id))state.teams[targetZone].push(player);}
-  renderHolding(); renderTeams();
   pushState();
 }
 
@@ -882,7 +881,6 @@ function mobileAssign(target){
   else{player=state.teams[assignSrc]?.find(p=>p.id===assignId);if(!player)return;state.teams[assignSrc]=state.teams[assignSrc].filter(p=>p.id!==assignId);}
   if(target==='holding'){if(!state.holding.find(p=>p.id===player.id))state.holding.push(player);}
   else{if(!state.teams[target].find(p=>p.id===player.id))state.teams[target].push(player);}
-  renderHolding(); renderTeams();
   pushState();assignId=null;assignSrc=null;
 }
 
@@ -939,7 +937,6 @@ function onTE(e){
     if(player){
       if(target==='holding'){if(!state.holding.find(p=>p.id===player.id))state.holding.push(player);}
       else{if(!state.teams[target].find(p=>p.id===player.id))state.teams[target].push(player);}
-      renderHolding(); renderTeams();
       pushState();
     }
   }
@@ -1003,6 +1000,8 @@ function resetScores() {
 function completeGame(gi) {
   if (!isAdmin) return;
   state.scoresheets[gi].completed = !state.scoresheets[gi].completed;
+  renderActiveScoresheetGame();
+  computeStandings();
   pushState();
 }
 
@@ -1034,7 +1033,7 @@ function computeStandings(){
   });
   const colors={Black:'#333',White:'#ddd',Purple:'#6b3fa0'};
   const rows=Object.entries(t).sort((a,b)=>b[1].pts-a[1].pts||(b[1].gf-b[1].ga)-(a[1].gf-a[1].ga));
-  document.getElementById('standings-body').innerHTML=rows.map(([name,s])=>`
+  const sb=document.getElementById('standings-body');if(!sb)return;sb.innerHTML=rows.map(([name,s])=>`
     <tr>
       <td><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${colors[name]||'#888'};margin-right:8px"></span>${name}</td>
       <td>${s.gp}</td><td>${s.w}</td><td>${s.l}</td><td>${s.tie}</td>
