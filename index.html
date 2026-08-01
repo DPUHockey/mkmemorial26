@@ -248,7 +248,7 @@ table tr:hover td{background:#222;}
   <div class="header-right">
     <div class="sync-dot" id="sync-dot" title="Firebase sync status"></div>
     <button class="admin-btn" id="admin-btn" onclick="toggleAdmin()">👁 VIEW</button>
-    <div class="ver-badge">v7.2</div>
+    <div class="ver-badge">v7.3</div>
   </div>
 </header>
 
@@ -397,6 +397,7 @@ table tr:hover td{background:#222;}
     <button class="btn btn-yellow" onclick="openSecondScreen()">📺 Open on 2nd Screen</button>
     <button class="btn btn-purple" onclick="renderOutput()">🔄 Refresh Preview</button>
     <button class="btn" style="background:#333;color:#ccc" onclick="printOutput()">🖨️ Print</button>
+        <button class="btn" style="background:#333;color:#ccc" onclick="printRosters()">🖨️ Print Rosters</button>
   </div>
   <div class="output-frame" id="output-frame">
     <div style="text-align:center;color:#555;padding:40px">Click Refresh Preview to generate output</div>
@@ -1526,6 +1527,47 @@ function openSecondScreen(){
     setTimeout(attach,3000);
   })();
   <\/script>
+  </body></html>`);
+  w.document.close();
+}
+
+function printRosters(){
+  const tLabels={white:'BLACK',yellow:'WHITE',black:'PURPLE'};
+  const cols = ['white','yellow','black'].map(team=>{
+    const players = sortPlayers(state.teams[team]);
+    const header = team==='white'?'border-bottom:2px solid #000;'
+                 : team==='yellow'?'border-bottom:2px solid #000;'
+                 : 'border-bottom:2px solid #000;';
+    const rows = players.length===0
+      ? '<tr><td colspan="2" style="color:#999;text-align:center;padding:8px">No players</td></tr>'
+      : players.map(p=>`<tr>
+          <td style="padding:3px 6px;font-size:12px;border-bottom:1px solid #eee">${esc(p.name)}</td>
+          <td style="padding:3px 6px;font-size:11px;color:#555;text-align:center;border-bottom:1px solid #eee;white-space:nowrap">${p.pos||''}</td>
+        </tr>`).join('');
+    return `<div style="flex:1;min-width:0">
+      <div style="font-family:Arial,sans-serif;font-size:15px;font-weight:700;letter-spacing:1px;padding:8px 6px;border-bottom:2px solid #000;text-align:center">
+        ${tLabels[team]} <span style="font-size:11px;font-weight:400">(${players.length})</span>
+      </div>
+      <table style="width:100%;border-collapse:collapse">${rows}</table>
+    </div>`;
+  }).join('<div style="width:1px;background:#ccc;margin:0 8px"></div>');
+
+  const w = window.open('','_blank');
+  w.document.write(`<!DOCTYPE html><html><head>
+    <title>Mitch Kurtz Memorial 2026 — Rosters</title>
+    <style>
+      *{box-sizing:border-box;margin:0;padding:0;}
+      body{font-family:Arial,sans-serif;color:#000;background:#fff;padding:20px;}
+      h1{font-size:18px;font-weight:700;text-align:center;letter-spacing:1px;margin-bottom:4px;}
+      .subtitle{font-size:11px;text-align:center;color:#555;margin-bottom:16px;}
+      .teams{display:flex;gap:0;align-items:flex-start;}
+      @media print{body{padding:10px;}@page{margin:0.5in;}}
+    </style>
+  </head><body>
+    <h1>MITCH KURTZ MEMORIAL 2026</h1>
+    <div class="subtitle">Official Rosters</div>
+    <div class="teams">${cols}</div>
+    <script>window.onload=function(){window.print();}<\/script>
   </body></html>`);
   w.document.close();
 }
